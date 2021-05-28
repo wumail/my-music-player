@@ -1,0 +1,132 @@
+
+@mixin webkit($attr, $value) {
+    -webkit-#{$attr}: $value;
+    -moz-#{$attr}: $value;
+    -ms-#{$attr}: $value;
+    -o-#{$attr}: $value;
+    #{$attr}: $value;
+}
+
+@mixin webkit_a($name,$value){
+    #{$name}: -webkit-#{$value};
+    #{$name}: -moz-#{$value};
+    #{$name}: -ms-#{$value};
+    #{$name}: -o-#{$value};
+    #{$name}: #{$value};
+}
+
+$color_red:red;
+
+//按钮拟态
+$btn_color:#EBECF0;
+$btn_shadow1:inset 1px 1px 2px 0 rgb(255 255 255 / 80%),4px 4px 10px #b6b6b5, -4px -4px 10px #ffffff;
+
+$btn_shadow2:7px 7px 15px rgba(55, 84, 170, .15),-7px -7px 20px rgba(255, 255, 255, 1),inset 0px 0px 4px rgba(255, 255, 255, .2),inset 7px 7px 15px rgba(55, 84, 170, 0),inset -7px -7px 20px rgba(255, 255, 255, 0),0px 0px 4px rgba(255, 255, 255, 0) !important;
+$btn_shadow2_active:7px 7px 15px rgba(55, 84, 170, .15),-7px -7px 20px rgba(255, 255, 255, 1),inset 0px 0px 4px rgba(255, 255, 255, 0),inset 7px 7px 15px rgba(55, 84, 170, .15),inset -7px -7px 20px rgba(255, 255, 255, 1),0px 0px 4px rgba(255, 255, 255, .2) !important;
+
+$btn_bkg:linear-gradient(145deg, #cdcdcb, #f4f4f2);
+$btn_transition: all 0.25s ease 0s !important;
+
+$btn_bkg1:#ece4e4;
+$linearAO:linear-gradient(145deg, #d4cdcd, #fdf4f4);
+$linearTU:linear-gradient(145deg, #fdf4f4, #d4cdcd);
+$btn_shadow3:20px 20px 60px #c9c2c2,-20px -20px 60px #ffffff;
+$btn_shadow4:9px 9px 18px #c9c2c2,-9px -9px 18px #ffffff;
+$btn_shadow4_active:7px 7px 15px rgba(208, 201 , 201, .7),-7px -7px 20px rgba(255, 255, 255, 1),inset 0px 0px 4px rgba(85, 28, 28, 0),inset 7px 7px 15px rgba(104, 109, 126, 0.15),inset -7px -7px 20px rgba(255, 255, 255, 1),0px 0px 4px rgba(148, 145, 145, 0.2) !important;
+// $btn_shadow4_reserve:7px 7px 15px rgba(148, 145, 145, 0.2),0px 0px 4px rgba(208, 201 , 201, .7) !important;
+$txt-shadow1:5px 5px 10px rgb(71, 71, 71);
+
+//music
+$icon_netease:'@/assets/icon/music/netease.png';
+$icon_qqmusic:'@/assets/icon/music/qqmusic.png';
+$icon-music-list:(
+    netease:$icon_netease,
+    qqmusic:$icon_qqmusic
+);
+
+// //16
+// $icon_player_list_16:'@/assets/icon/playerfull/icon_16/lis1t.png';
+// $icon_player_single_16:'@/assets/icon/playerfull/icon_16/single.png';
+// $icon_player_loop_16:'@/assets/icon/playerfull/icon_16/loop.png';
+// $icon_player_random_16:'@/assets/icon/playerfull/icon_16/random.png';
+// $icon_player_pause_16:'@/assets/icon/playerfull/icon_16/pause.png';
+// $icon_player_play_16:'@/assets/icon/playerfull/icon_16/play.png';
+// $icon_player_prev_16:'@/assets/icon/playerfull/icon_16/prev1.png';
+// $icon_player_next_16:'@/assets/icon/playerfull/icon_16/next1.png';
+
+// $icon_player_16:(
+//     player_list_16:$icon_player_list_16,
+//     player_single_16:$icon_player_single_16,
+//     player_loop_16:$icon_player_loop_16,
+//     player_random_16:$icon_player_random_16,
+//     player_pause_16:$icon_player_pause_16,
+//     player_play_16:$icon_player_play_16,
+//     player_prev_16:$icon_player_prev_16,
+//     player_next_16:$icon_player_next_16
+// );
+// //图标_32
+// $icon_player_list_32:'@/assets/icon/playerfull/icon_32/list1.png';
+// $icon_player_single_32:'@/assets/icon/playerfull/icon_32/single.png';
+// $icon_player_loop_32:'@/assets/icon/playerfull/icon_32/loop.png';
+// $icon_player_random_32:'@/assets/icon/playerfull/icon_32/random.png';
+// $icon_player_pause_32:'@/assets/icon/playerfull/icon_32/pause.png';
+// $icon_player_play_32:'@/assets/icon/playerfull/icon_32/play.png';
+// $icon_player_prev_32:'@/assets/icon/playerfull/icon_32/prev1.png';
+// $icon_player_next_32:'@/assets/icon/playerfull/icon_32/next1.png';
+// $icon_player_32:(
+//     player_list_32:$icon_player_list_32,
+//     player_single_32:$icon_player_single_32,
+//     player_loop_32:$icon_player_loop_32,
+//     player_random_32:$icon_player_random_32,
+//     player_pause_32:$icon_player_pause_32,
+//     player_play_32:$icon_player_play_32,
+//     player_prev_32:$icon_player_prev_32,
+//     player_next_32:$icon_player_next_32
+// );
+// //48
+// $icon_player_list_48:'@/assets/icon/playerfull/icon_48/list1.png';
+// $icon_player_single_48:'@/assets/icon/playerfull/icon_48/single.png';
+// $icon_player_loop_48:'@/assets/icon/playerfull/icon_48/loop.png';
+// $icon_player_random_48:'@/assets/icon/playerfull/icon_48/random.png';
+// $icon_player_pause_48:'@/assets/icon/playerfull/icon_48/pause.png';
+// $icon_player_play_48:'@/assets/icon/playerfull/icon_48/play.png';
+// $icon_player_prev_48:'@/assets/icon/playerfull/icon_48/prev1.png';
+// $icon_player_next_48:'@/assets/icon/playerfull/icon_48/next1.png';
+// $icon_player_48:(
+//     player_list_48:$icon_player_list_48,
+//     player_single_48:$icon_player_single_48,
+//     player_loop_48:$icon_player_loop_48,
+//     player_random_48:$icon_player_random_48,
+//     player_pause_48:$icon_player_pause_48,
+//     player_play_48:$icon_player_play_48,
+//     player_prev_48:$icon_player_prev_48,
+//     player_next_48:$icon_player_next_16
+// );
+
+// //16
+// $icon_voice_mute_16:'@/assets/icon/voice/icon_16/mute.png';
+// $icon_voice_sound_max_16:'@/assets/icon/voice/icon_16/sound-max.png';
+// $icon_voice_sound_min_16:'@/assets/icon/voice/icon_16/sound-min.png';
+// $icon_voice_16:(
+//     voice_mute_16:$icon_voice_mute_16,
+//     voice_sound_max_16:$icon_voice_sound_max_16,
+//     voice_sound_min_16:$icon_voice_sound_min_16
+// );
+// //voice_32
+// $icon_voice_mute_32:'@/assets/icon/voice/icon_32/mute.png';
+// $icon_voice_sound_max_32:'@/assets/icon/voice/icon_32/sound-max.png';
+// $icon_voice_sound_min_32:'@/assets/icon/voice/icon_32/sound-min.png';
+// $icon_voice_32:(
+//     voice_mute_32:$icon_voice_mute_32,
+//     voice_sound_max_32:$icon_voice_sound_max_32,
+//     voice_sound_min_32:$icon_voice_sound_min_32
+// );
+// //48
+// $icon_voice_mute_48:'@/assets/icon/voice/icon_48/mute.png';
+// $icon_voice_sound_max_48:'@/assets/icon/voice/icon_48/sound-max.png';
+// $icon_voice_sound_min_48:'@/assets/icon/voice/icon_48/sound-min.png';
+// $icon_voice_48:(
+//     voice_mute_48:$icon_voice_mute_48,
+//     voice_sound_max_48:$icon_voice_sound_max_48,
+//     voice_sound_min_48:$icon_voice_sound_min_48
+// );

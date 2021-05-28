@@ -1,0 +1,190 @@
+@import './global.scss';
+@import './normalize.scss';
+
+body{
+    background-color: #ece4e4;
+    overflow-x: hidden;
+}
+
+
+.normalbar{
+    width: 0px;
+    height: 0px;
+    border-radius: 40px;
+    box-shadow: $btn_shadow4;
+    background: $btn_color;
+    transition: $btn_transition;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.38s ease 0s !important;
+}
+
+.bigwrap {
+    width: 350px;
+    height: 600px;
+}
+
+.clbtn{
+    // background-color:$btn_color;
+    border-radius: 100px;
+    box-shadow: $btn_shadow4;
+    background: $btn_color;
+    transition: $btn_transition;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.clbtn:hover {  
+    box-shadow: $btn_shadow4_active;
+    i{
+        transform: scale(0.9);
+    }
+}
+
+.hidden{
+    display: none !important;
+}
+// ,hidden:!showPlayList
+.transparent{
+    opacity: 0 !important;
+}
+
+.z_index1{
+    z-index: 2 !important;
+}
+
+.bg{
+    line-height: 90px;
+    width: 90px;
+    height: 90px;
+}
+
+.md {
+    line-height: 50px;
+    width: 50px;
+    height: 50px;
+}
+
+.sm {
+    line-height: 40px;
+    width: 40px;
+    height: 40px;
+ }
+
+.icon-48{
+    width: 48px;
+    height: 48px;
+}
+
+.icon-32{
+    width: 32px;
+    height: 32px;
+}
+
+.icon-16{
+    width: 16px;
+    height: 16px;
+}
+
+.font-16{
+    font-size: 16px;
+}
+
+.font-32{
+    font-size: 32px;
+}
+
+.font-48{
+    font-size: 48px;
+}
+
+.music-icon{
+    height: 32px;
+    width: 32px;
+    transform: scale(0.5);
+    background-repeat: no-repeat;
+}
+
+.songlist {
+    height: inherit;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    //   background: #ccc;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+    &::-webkit-scrollbar {
+      width: 0px;
+    }
+    .songitem {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      width: inherit;
+      height: 50px;
+      border-radius: 3px;
+      line-height: 50px;
+      .iconfont {
+        margin-left: 10px;
+      }
+      // border-bottom: 1px solid rgba($color: #000000, $alpha: 0.3);
+      .songindex {
+        margin-left: 5px;
+        margin-right: 10px;
+        width: 15px;
+      }
+      .songname {
+        line-height: 15px;
+        height: 30px;
+        display: flex;
+        align-items: flex-start;
+        flex-direction: column;
+        flex: 1;
+        overflow-y: scroll;
+        &::-webkit-scrollbar {
+          width: 0px;
+        }
+        .songartist {
+          display: block;
+          font-size: 10px;
+        }
+      }
+    }
+  }
+
+@each $key,$value in $icon-music-list {
+    .#{$key}{
+        background-image: url($value);
+    }
+}
+// @each $key,$value in $icon_player_16 {
+//     .#{$key}{
+//         background-image: url($value);
+//     }
+// }
+// @each $key,$value in $icon_player_32 {
+//     .#{$key}{
+//         background-image: url($value);
+//     }
+// }
+// @each $key,$value in $icon_player_48 {
+//     .#{$key}{
+//         background-image: url($value);
+//     }
+// }
+// @each $key,$value in $icon_voice_16 {
+//     .#{$key}{
+//         background-image: url($value);
+//     }
+// }
+// @each $key,$value in $icon_voice_32 {
+//     .#{$key}{
+//         background-image: url($value);
+//     }
+// }
+// @each $key,$value in $icon_voice_48 {
+//     .#{$key}{
+//         background-image: url($value);
+//     }
+// }
