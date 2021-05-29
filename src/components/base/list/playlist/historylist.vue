@@ -1,42 +1,18 @@
 <template>
   <div>
-    <div
-      class="songitem"
-      v-for="(song,index) in songs.songlist"
-      :key="song.id"
-    >
-      <span class="songindex"> {{index+1}}</span>
-      <span class="songname">{{song.name}}
-        <span class="songartist">{{song.artist}}</span>
-      </span>
-      <!-- <Icon :iconinfo='iconItems.favorite' /> -->
-      <!-- <Icon :iconinfo='iconItems.play_fill' />
-      <Icon :iconinfo='iconItems.add' /> -->
-      <Icon
-        :iconinfo='iconItems.more'
-        @click='toggleDrawer(song)'
-      />
-    </div>
+    <ListComp :songlist='songs.songlist' />
   </div>
 </template>
 
+<script>
+export default {
+    name:'HistoryList'
+}
+</script>
 <script setup>
-import { defineProps, inject, reactive, ref } from "vue";
-import { useRoute,useRouter } from "vue-router";
+import { reactive } from "vue";
 
-import Icon from '@/components/base/icon/index.vue';
-
-const route = useRoute();
-const router = useRouter();
-
-const props = defineProps(
-    {
-        songlist:{
-            type:Array,
-            default:()=>{}
-        },
-    }
-)
+import ListComp from '../index.vue';
 
 const songs = reactive(
     {
@@ -54,7 +30,7 @@ const songs = reactive(
             },
             {
                 name:'Jazz Suite No.2:Waltz No.2',
-                artist:'The City',
+                artist:'The City of Prague Philharmonic Orchestra',
                 scr:'https://music.163.com/song/media/outer/url?id=518649049.mp3',
             },
             {
@@ -72,24 +48,6 @@ const songs = reactive(
         ]
     }
 )
-
-const iconItems = reactive(
-    {
-        more:{
-            type:'more',
-            size:24
-        },
-    }
-)
-
-let drawer = ref(null);
-drawer = inject('drawer');
-
-function toggleDrawer(data) {
-    console.log(data);
-    drawer.value = !drawer.value
-}
-
 </script>
 
 <style lang="scss">

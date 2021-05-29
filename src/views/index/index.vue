@@ -17,7 +17,6 @@
         :span='8'
         class="right"
       >
-        <!-- <router-view /> -->
         <PlayList :ifshow='showPlayList' />
       </el-col>
     </el-row>
@@ -26,12 +25,15 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue';
+import { provide, reactive, ref } from 'vue';
 import UserBar from '@/components/userbar/index.vue';
 import Player from '@/components/player/index.vue';
 import PlayList from '@/components/playlist/index.vue';
+import { useRoute, useRouter } from 'vue-router';
 
-let showPlayList = ref(true);
+const router = useRouter();
+const route = useRoute();
+let showPlayList = ref(false);
 
 const song = reactive(
   {
@@ -39,8 +41,14 @@ const song = reactive(
   }
 )
 
+provide('showPlayList',showPlayList)
+
 function togglePlayList() {
   showPlayList.value = !showPlayList.value;
+  if(!showPlayList.value){
+    router.go(-(history.length-1));
+    router.replace({ path: "/" });
+  }
 }
 
 </script>

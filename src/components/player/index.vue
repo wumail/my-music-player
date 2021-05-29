@@ -17,7 +17,7 @@
             <i class="iconfont icon-album"></i>
             Wish You Were Here</span>
           <div class="source-from">
-            from<span>qq音乐</span> <i class="music-icon qqmusic"></i>
+            from<span>qq音乐</span> <i class="music-icon netease"></i>
             <!-- <i class="music-icon netease"></i> -->
           </div>
         </div>

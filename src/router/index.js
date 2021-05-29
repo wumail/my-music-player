@@ -10,28 +10,36 @@ const routes = [
                 path: '/list',
                 name: 'List',
                 redirect: 'playlist',
-                component: () => import('@/components/base/list/index.vue'),
+                component: () => import('@/components/base/list/playlist/index.vue'),
                 children: [
                     {
                         path: '/historylist',
                         name: 'HistoryList',
-                        component: () => import('@/components/base/list/historylist.vue'),
+                        component: () => import('@/components/base/list/playlist/historylist.vue'),
+                        meta: {
+                            keepAlive: true
+                        }
                     },
                     {
                         path: '/playlist',
                         name: 'PlayList',
-                        component: () => import('@/components/base/list/playlist.vue'),
+                        component: () => import('@/components/base/list/playlist/playlist.vue'),
+                        meta: {
+                            keepAlive: true
+                        }
                     },
                     {
                         path: '/searchlist',
                         name: 'SearchList',
-                        component: () => import('@/components/base/list/searchlist.vue'),
+                        component: () => import('@/components/base/list/playlist/searchlist.vue'),
+                        meta: {
+                            keepAlive: true
+                        }
                     },
                 ]
-            }
+            },
         ]
     },
-
 ]
 
 const router = createRouter({

@@ -10,7 +10,10 @@
       >
         <div class="playlist-bar">
           <div class="playlist-topbar">
-            <Icon :iconinfo='iconItems.back' />
+            <Icon
+              :iconinfo='iconItems.back'
+              @click="back"
+            />
             <el-input
               class="topbar-input"
               size='small'
@@ -20,15 +23,18 @@
           <div class="playlist-navbar">
             <Icon
               :iconinfo='iconItems.searchlist'
-              @click="searchlist"
+              :class="{navActive:route.name==='SearchList'}"
+              @click="toSearchList"
             />
             <Icon
               :iconinfo='iconItems.playlist'
-              @click="playlist"
+              :class="{navActive:route.name==='PlayList'}"
+              @click="toPlayList"
             />
             <Icon
               :iconinfo='iconItems.historylist'
-              @click="historylist"
+              :class="{navActive:route.name==='HistoryList'}"
+              @click="toHistoryList"
             />
           </div>
         </div>
@@ -60,8 +66,8 @@
 <script setup>
 import { ref,defineProps, watch, reactive, provide, onMounted } from "vue";
 import Icon from '@/components/base/icon/index.vue';
-import List from '@/components/base/list/index.vue';
-import { useRoute, useRouter } from "vue-router";
+import List from '@/components/base/list/playlist/index.vue';
+import { onBeforeRouteUpdate, useRoute, useRouter } from "vue-router";
 
 const router = useRouter();
 const route = useRoute();
@@ -166,7 +172,14 @@ function ifpanel() {
     })
 }
 
-function searchlist() {
+function back() {
+  if (history.state.back === '/') {
+    return
+  }
+  router.back()
+}
+
+function toSearchList() {
   router.push(
     {
       name:'SearchList'
@@ -174,7 +187,7 @@ function searchlist() {
   )
 }
 
-function playlist() {
+function toPlayList() {
   router.push(
     {
       name:'PlayList'
@@ -182,7 +195,7 @@ function playlist() {
   )
 }
 
-function historylist() {
+function toHistoryList() {
   router.push(
     {
       name:'HistoryList'
@@ -232,7 +245,9 @@ function historylist() {
       height: 500px;
       width: 330px;
       margin-bottom: 10px;
-      // background: #ccc;
+      background: rgb(226, 226, 226);
+      border-top-left-radius: 15px;
+      border-top-right-radius: 15px;
       border-bottom-left-radius: 30px;
       border-bottom-right-radius: 30px;
       // overflow-y: scroll;
