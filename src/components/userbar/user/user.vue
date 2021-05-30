@@ -29,7 +29,7 @@ import { reactive } from 'vue';
 const iconItems = reactive({
   spanner:{
     type:'spanner-fill1',
-    size:28
+    size:21
   }
 })
 
@@ -58,7 +58,7 @@ const iconItems = reactive({
   }
   .music-icon {
     // background: #000;
-    transform: scale(0.8);
+    transform: scale(0.6);
   }
 }
 #neteaseInfo {
