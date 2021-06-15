@@ -19,17 +19,17 @@
           <div class="userbar-sidebar">
             <Icon
               :iconinfo='iconItems.user'
-              :class="{sideNavActive:toggleWrap==='user'}"
+              :class="{sideNavActive:route.name==='Setting'}"
               @click="toUser"
             />
             <Icon
               :iconinfo='iconItems.favorite'
-              :class="{sideNavActive:toggleWrap==='favorite'}"
+              :class="{sideNavActive:route.name==='Favorite'}"
               @click="toFavorite"
             />
             <Icon
               :iconinfo='iconItems.songlist'
-              :class="{sideNavActive:toggleWrap==='songlist'}"
+              :class="{sideNavActive:route.name==='SongList'}"
               @click="toSonglist"
             />
           </div>
@@ -131,36 +131,45 @@ const panelItems = reactive(
 
 
 const toggleWrap = ref('user');
-provide('wrap',toggleWrap);
+// provide('wrap',toggleWrap);
 
 onMounted(()=>{
   ifpanel()
 })
 
 function toggleUserBar(){
+  router.push({
+    name:'User'
+  })
     bigwrap.value = !bigwrap.value;
     k_roll.value = !k_roll.value;
 }
 
 function toUser() {
-  if(toggleWrap.value!=='user'){
-    toggleWrap.value = 'user';
-    // console.log(toggleWrap.value);
-  }
+  router.push({
+    name:'Setting'
+  })
+  // if(toggleWrap.value!=='user'){
+  //   toggleWrap.value = 'user';
+  // }
 }
 
 function toFavorite() {
-  if(toggleWrap.value!=='favorite'){
-    toggleWrap.value = 'favorite';
-    // console.log(toggleWrap.value);
-  }
+   router.push({
+    name:'Favorite'
+  })
+  // if(toggleWrap.value!=='favorite'){
+  //   toggleWrap.value = 'favorite';
+  // }
 }
 
 function toSonglist() {
-  if(toggleWrap.value!=='songlist'){
-    toggleWrap.value = 'songlist';
-    // console.log(toggleWrap.value);
-  }
+   router.push({
+    name:'SongList'
+  })
+  // if(toggleWrap.value!=='songlist'){
+  //   toggleWrap.value = 'songlist';
+  // }
 }
 
 function ifpanel() {

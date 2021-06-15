@@ -9,36 +9,39 @@ export default {
 }
 </script>
 <script setup>
-import { inject, nextTick, reactive, ref, watchEffect } from "vue";
+import { defineProps, inject, nextTick, reactive, ref, watchEffect } from "vue";
 import ListComp from '../index.vue';
 
-const songs = reactive(
+const props = defineProps(
     {
-        songlist: [
-            {
-                name:'Shine On You Crazy Diamond',
-                artist:'Pink Floyd'
-            },
-            {
-                name:'Jazz Suite No.2:Waltz No.2',
-                artist:'The City of Prague Philharmonic Orchestra'
-            },
-            {
-                name:'静止',artist:'杨乃文'
-            },
-            {
-                name:'星星堆满天',artist:'杨乃文'
-            },
-            {
-                name:'Silence',artist:'杨乃文'
-            },
-        ]
+        searchRes:{
+            type:Object,
+            default:()=>{}
+        }
     }
 )
 
-function aba() {
-    console.log(1);
+const songs = reactive(
+    {
+        songlist: []
+    }
+)
+
+watchEffect(()=>{
+    songs.songlist = props.searchRes;
+    setData()
+})
+
+function setData() {
+    songs.songlist.forEach(song => {
+        let artist = '';
+        for(let i = 0 ; i<song?.artists.length;i++){
+            artist += `${song?.artists[i].name}/`
+        }
+        song.artist = artist
+    });
 }
+
 </script>
 
 <style lang="scss">

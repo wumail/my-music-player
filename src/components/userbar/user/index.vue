@@ -1,6 +1,6 @@
 <template>
   <div>
-    <User
+    <!-- <User
       v-if="wrap==='user'"
       ref="userRef"
     />
@@ -11,7 +11,8 @@
     <Songlist
       v-else-if="wrap==='songlist'"
       ref="songlistRef"
-    />
+    /> -->
+    <router-view />
   </div>
 </template>
 
@@ -21,11 +22,11 @@ import Favorite from './favorite.vue';
 import User from './user.vue';
 import Songlist from './songlist.vue';
 
-let userRef = ref();
-let favoriteRef = ref();
-let songlistRef = ref();
+// let userRef = ref();
+// let favoriteRef = ref();
+// let songlistRef = ref();
 
-let wrap = inject('wrap');
+// let wrap = inject('wrap');
 </script>
 <style lang="scss">
 </style>

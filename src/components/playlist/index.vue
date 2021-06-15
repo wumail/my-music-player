@@ -28,23 +28,23 @@
           <div class="playlist-navbar">
             <Icon
               :iconinfo='iconItems.searchlist'
-              :class="{navActive:route.name==='SearchList'}"
+              :class="{navActive:playlistFlag==='SearchList'}"
               @click="toSearchList"
             />
             <Icon
               :iconinfo='iconItems.playlist'
-              :class="{navActive:route.name==='PlayList'}"
+              :class="{navActive:playlistFlag==='PlayList'}"
               @click="toPlayList"
             />
             <Icon
               :iconinfo='iconItems.historylist'
-              :class="{navActive:route.name==='HistoryList'}"
+              :class="{navActive:playlistFlag==='HistoryList'}"
               @click="toHistoryList"
             />
           </div>
         </div>
         <div class="playlist-content">
-          <List />
+          <PlayList :searchResult='searchAbout.searchResult' />
         </div>
         <div
           class="playlist-panel"
@@ -73,7 +73,7 @@ import { ref,defineProps, watch, reactive, provide, onMounted } from "vue";
 import { onBeforeRouteUpdate, useRoute, useRouter } from "vue-router";
 
 import Icon from '@/components/base/icon/index.vue';
-import List from '@/components/base/list/playlist/index.vue';
+import PlayList from '@/components/base/list/playlist/index.vue';
 import { net163_search } from "@/api/netease.js";
 
 const router = useRouter();
@@ -84,9 +84,11 @@ const props = defineProps({
         default:false
     }
 })
+let playlistFlag = ref('SearchList');
 let showPlayList = ref(false);
 let drawer = ref(false);
 provide('drawer',drawer)
+provide('flag',playlistFlag)
 
 const searchAbout =reactive(
   {
@@ -193,9 +195,17 @@ function search() {
     keywords:searchAbout.searchInput
   }).then((res)=>{
     // console.log(res);
-    searchAbout.searchResult = res;
-    
-    // console.log(searchAbout.searchResult);
+    const resInfo = [];
+    res.forEach(res => {
+      resInfo.push({
+        name:res.name,
+        artists:res.artists,
+        album:res.album,
+        id:res.id,
+        mvid:res.mvid
+      })
+    })
+    searchAbout.searchResult = resInfo;
   }).catch((err)=>{
     console.log(err);
   })
@@ -209,27 +219,21 @@ function back() {
 }
 
 function toSearchList() {
-  router.push(
-    {
-      name:'SearchList'
-    }
-  )
+  if(playlistFlag.value !== 'SearchList'){
+    playlistFlag.value = 'SearchList';
+  }
 }
 
 function toPlayList() {
-  router.push(
-    {
-      name:'PlayList'
-    }
-  )
+  if(playlistFlag.value !== 'PlayList'){
+    playlistFlag.value = 'PlayList';
+  }
 }
 
 function toHistoryList() {
-  router.push(
-    {
-      name:'HistoryList'
-    }
-  )
+  if(playlistFlag.value !== 'HistoryList'){
+    playlistFlag.value = 'HistoryList';
+  }
 }
 </script>
 

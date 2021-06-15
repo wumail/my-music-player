@@ -1,13 +1,33 @@
 <template>
+  <div>
+    <PlayList :resource='resource.list' />
+  </div>
 </template>
 
 <script setup>
 import { net163_playlist } from "@/api/netease";
+import { onMounted, reactive } from "@vue/runtime-core";
+import PlayList from './list.vue';
 
+const resource = reactive(
+    {
+        list:[]
+    }
+)
 
-function getFavorite_net163() {
+onMounted(()=>{
+    getPlayList_net163()
+})
+
+function getPlayList_net163() {
     net163_playlist().then((response)=>{
-        console.log(response);
+        const playlist = response.playlist;
+        let userId = playlist[0].userId;
+        const userlist = playlist.filter((list)=>{
+            return userId===list.userId
+        });
+        resource.list = userlist;
+        console.log(userlist);
     }).catch((err)=>{
         console.log(err);
     })

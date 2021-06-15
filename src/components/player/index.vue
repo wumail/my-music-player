@@ -386,11 +386,11 @@ function togglePause(e){
 
 function togglePlayList() {
     emit('togglePlayList')
-    router.push(
-      {
-        name:'SearchList'
-      }
-    )
+    // router.push(
+    //   {
+    //     name:'SearchList'
+    //   }
+    // )
 }
 
 function toggleVolume(){

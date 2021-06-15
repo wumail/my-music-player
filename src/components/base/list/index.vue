@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import { defineProps, inject, onBeforeMount, reactive, ref } from "vue";
+import { defineProps, inject, onBeforeMount, reactive, ref, watchEffect } from "vue";
 import { useRoute,useRouter } from "vue-router";
 
 import Icon from '@/components/base/icon/index.vue';
@@ -41,6 +41,10 @@ const songs = reactive(
         ]
     }
 )
+
+watchEffect(()=>{
+  initlist()
+})
 
 function initlist() {
     songs.songlist = props.songlist;
