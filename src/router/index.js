@@ -9,7 +9,7 @@ const routes = [
             {
                 path: '/list',
                 name: 'List',
-                redirect: 'playlist',
+                redirect: 'historylist',
                 component: () => import('@/components/base/list/playlist/index.vue'),
                 children: [
                     {

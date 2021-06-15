@@ -35,5 +35,15 @@ export default defineConfig({
         },
       }]
     }),
-  ]
+  ],
+  server: {
+    port: '8000',
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3030', // 凡是遇到 /api 路径的请求，都映射到 target 属性
+        changeOrigin: true,
+        rewrite: path => path.replace(/^\/api/, '')
+      }
+    }
+  }
 })

@@ -11,12 +11,12 @@
         </keep-alive>
       </transition>
     </router-view> -->
-    <router-view />
+    <router-view ref="list" />
   </div>
 </template>
 
 <script setup>
-// import { reactive } from "vue";
+import { ref } from "vue";
 
 // const includelist=reactive(
 //   [
@@ -25,6 +25,8 @@
 //     'SearchList',
 //   ]
 // )
+let list = ref('');
+
 </script>
 
 <style lang="scss">

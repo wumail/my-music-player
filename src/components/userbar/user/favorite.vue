@@ -8,6 +8,8 @@
 import List from '@/components/base/list/index.vue';
 import { reactive } from "vue";
 
+import { net163_playlist } from "@/api/netease";
+
 const songs = reactive(
     {
         songlist:[
@@ -42,6 +44,16 @@ const songs = reactive(
         ]
     }
 )
+
+
+
+function getFavorite_net163() {
+    net163_playlist().then((response)=>{
+        console.log(response);
+    }).catch((err)=>{
+        console.log(err);
+    })
+}
 
 </script>
 <style lang="scss">

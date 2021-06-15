@@ -388,7 +388,7 @@ function togglePlayList() {
     emit('togglePlayList')
     router.push(
       {
-        name:'List'
+        name:'SearchList'
       }
     )
 }

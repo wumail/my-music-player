@@ -46,7 +46,7 @@ provide('showPlayList',showPlayList)
 function togglePlayList() {
   showPlayList.value = !showPlayList.value;
   if(!showPlayList.value){
-    router.go(-(history.length-1));
+    router.go(-(history.length-2));
     router.replace({ path: "/" });
   }
 }

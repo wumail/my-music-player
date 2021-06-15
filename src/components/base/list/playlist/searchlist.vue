@@ -9,12 +9,12 @@ export default {
 }
 </script>
 <script setup>
-import { reactive } from "vue";
+import { inject, nextTick, reactive, ref, watchEffect } from "vue";
 import ListComp from '../index.vue';
 
 const songs = reactive(
     {
-        songlist:[
+        songlist: [
             {
                 name:'Shine On You Crazy Diamond',
                 artist:'Pink Floyd'
@@ -35,6 +35,10 @@ const songs = reactive(
         ]
     }
 )
+
+function aba() {
+    console.log(1);
+}
 </script>
 
 <style lang="scss">

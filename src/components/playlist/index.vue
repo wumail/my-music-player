@@ -15,10 +15,15 @@
               @click="back"
             />
             <el-input
+              v-model="searchAbout.searchInput"
               class="topbar-input"
               size='small'
+              clearable
             ></el-input>
-            <Icon :iconinfo='iconItems.search' />
+            <Icon
+              :iconinfo='iconItems.search'
+              @click="search"
+            />
           </div>
           <div class="playlist-navbar">
             <Icon
@@ -65,9 +70,11 @@
 
 <script setup>
 import { ref,defineProps, watch, reactive, provide, onMounted } from "vue";
+import { onBeforeRouteUpdate, useRoute, useRouter } from "vue-router";
+
 import Icon from '@/components/base/icon/index.vue';
 import List from '@/components/base/list/playlist/index.vue';
-import { onBeforeRouteUpdate, useRoute, useRouter } from "vue-router";
+import { net163_search } from "@/api/netease.js";
 
 const router = useRouter();
 const route = useRoute();
@@ -80,6 +87,15 @@ const props = defineProps({
 let showPlayList = ref(false);
 let drawer = ref(false);
 provide('drawer',drawer)
+
+const searchAbout =reactive(
+  {
+    searchInput:'',
+    searchResult:[],
+  }
+)
+
+provide('searchRes',searchAbout.searchResult)
 
 const iconItems = reactive(
   {
@@ -170,6 +186,19 @@ function ifpanel() {
         drawer.value = false
       }
     })
+}
+
+function search() {
+  net163_search({
+    keywords:searchAbout.searchInput
+  }).then((res)=>{
+    // console.log(res);
+    searchAbout.searchResult = res;
+    
+    // console.log(searchAbout.searchResult);
+  }).catch((err)=>{
+    console.log(err);
+  })
 }
 
 function back() {
