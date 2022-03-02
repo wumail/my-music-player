@@ -7,34 +7,71 @@ const routes = [
         component: () => import('../views/index/index.vue'),
         children: [
             {
-                path: '/list',
-                name: 'List',
-                redirect: 'historylist',
-                component: () => import('@/components/base/list/playlist/index.vue'),
+                path: '/user',
+                name: 'User',
+                redirect: 'setting',
+                component: () => import('@/components/userbar/user/index.vue'),
                 children: [
                     {
-                        path: '/historylist',
-                        name: 'HistoryList',
-                        component: () => import('@/components/base/list/playlist/historylist.vue'),
+                        path: '/setting',
+                        name: 'Setting',
+                        component: () => import('@/components/userbar/user/user.vue'),
+                        meta: {
+                            keepAlive: true
+                        },
+                        children: [
+                            {
+                                path: '/login',
+                                name: 'Login',
+                                component: () => import('@/components/userbar/user/setting/user.vue'),
+                                meta: {
+                                    keepAlive: true
+                                },
+                            },
+                            {
+                                path: '/account',
+                                name: 'Account',
+                                component: () => import('@/components/userbar/user/setting/account.vue'),
+                                meta: {
+                                    keepAlive: true
+                                },
+                            }
+                        ]
+                    },
+                    {
+                        path: '/favorite',
+                        name: 'Favorite',
+                        component: () => import('@/components/userbar/user/favorite.vue'),
                         meta: {
                             keepAlive: true
                         }
                     },
                     {
-                        path: '/playlist',
-                        name: 'PlayList',
-                        component: () => import('@/components/base/list/playlist/playlist.vue'),
+                        path: '/songlist',
+                        name: 'SongList',
+                        component: () => import('@/components/userbar/user/songlist.vue'),
                         meta: {
                             keepAlive: true
-                        }
-                    },
-                    {
-                        path: '/searchlist',
-                        name: 'SearchList',
-                        component: () => import('@/components/base/list/playlist/searchlist.vue'),
-                        meta: {
-                            keepAlive: true
-                        }
+                        },
+                        redirect: 'playlist',
+                        children: [
+                            {
+                                path: '/playlist',
+                                name: 'PlayList',
+                                component: () => import('@/components/userbar/user/songlist/playlist.vue'),
+                                meta: {
+                                    keepAlive: true
+                                },
+                            },
+                            {
+                                path: '/songlist/:id',
+                                name: 'Songlist',
+                                component: () => import('@/components/userbar/user/songlist/songlist.vue'),
+                                // meta: {
+                                //     keepAlive: true
+                                // },
+                            }
+                        ]
                     },
                 ]
             },

@@ -13,23 +13,26 @@
     >
       <div :class="{hidden:!bigwrap,transparent:!bigwrap}">
         <div class="userbar-topbar">
-          <!-- <Icon :iconinfo='iconItems.back' /> -->
+          <Icon
+            :iconinfo='iconItems.back'
+            @click="backToPlayList"
+          />
         </div>
         <div class="userbar-main">
           <div class="userbar-sidebar">
             <Icon
               :iconinfo='iconItems.user'
-              :class="{sideNavActive:toggleWrap==='user'}"
+              :class="{sideNavActive:route.name==='Login'||route.name==='Account'  }"
               @click="toUser"
             />
             <Icon
               :iconinfo='iconItems.favorite'
-              :class="{sideNavActive:toggleWrap==='favorite'}"
+              :class="{sideNavActive:route.name==='Favorite'}"
               @click="toFavorite"
             />
             <Icon
               :iconinfo='iconItems.songlist'
-              :class="{sideNavActive:toggleWrap==='songlist'}"
+              :class="{sideNavActive:route.name==='PlayList' || route.fullPath.match(/songlist/)}"
               @click="toSonglist"
             />
           </div>
@@ -61,14 +64,42 @@
 </template>
 
 <script setup>
-import { inject, onMounted, provide, reactive, ref } from "vue";
+import { inject, onMounted, provide, reactive, ref, watchEffect } from "vue";
+
+import { useStore } from 'vuex';
+import { onBeforeRouteLeave, onBeforeRouteUpdate, useRoute, useRouter } from "vue-router";
 
 import Icon from '@/components/base/icon/index.vue';
 import Userbar from './user/index.vue';
-import { useRoute, useRouter } from "vue-router";
 
+const store = useStore();
 const router = useRouter();
 const route = useRoute();
+let currentUrl = ref('');
+// console.log(route);
+
+onBeforeRouteUpdate((to,from) =>{
+  // console.log(to.fullPath,from.fullPath)
+  // console.log(currentUrl.value);
+  if(from.fullPath.match(/songlist/) && to.fullPath !== '/playlist'){
+    currentUrl.value = from.fullPath
+  }
+  if(to.fullPath == '/playlist' && currentUrl.value != '/playlist'){
+    if(currentUrl.value != ''){
+      router.push(currentUrl.value)
+      return false;
+    }
+  }
+})
+
+
+let username = store.getters['playerNsong/username'];
+
+watchEffect(()=>{
+  username = store.getters['playerNsong/username']
+})
+provide('username',username)
+
 let bigwrap = ref(false);
 let k_roll =ref(false);
 let drawer = ref(false);
@@ -124,42 +155,71 @@ const panelItems = reactive(
         size:32,
       },
       txt:'删除曲目',
-      route:'SearchList'
     }
   ]
 )
 
 
 const toggleWrap = ref('user');
-provide('wrap',toggleWrap);
+// provide('wrap',toggleWrap);
 
 onMounted(()=>{
   ifpanel()
 })
 
 function toggleUserBar(){
-    bigwrap.value = !bigwrap.value;
-    k_roll.value = !k_roll.value;
+  bigwrap.value = !bigwrap.value;
+  k_roll.value = !k_roll.value;
+  if(bigwrap.value){
+    router.push({
+      name:'Account'
+    })
+  }else{
+    router.go(-(history.length-2));
+    router.replace({ path: "/" });
+  }
 }
 
 function toUser() {
-  if(toggleWrap.value!=='user'){
-    toggleWrap.value = 'user';
-    // console.log(toggleWrap.value);
+  if(username){
+    router.push({
+      name:'Account'
+    })
+  }else{
+    router.push({
+      name:'Login'
+    })
   }
+  // if(toggleWrap.value!=='user'){
+  //   toggleWrap.value = 'user';
+  // }
 }
 
 function toFavorite() {
-  if(toggleWrap.value!=='favorite'){
-    toggleWrap.value = 'favorite';
-    // console.log(toggleWrap.value);
-  }
+   router.push({
+    name:'Favorite'
+  })
+  // if(toggleWrap.value!=='favorite'){
+  //   toggleWrap.value = 'favorite';
+  // }
 }
 
 function toSonglist() {
-  if(toggleWrap.value!=='songlist'){
-    toggleWrap.value = 'songlist';
-    // console.log(toggleWrap.value);
+  router.push({
+      name:'PlayList'
+  })
+  // if(toggleWrap.value!=='songlist'){
+  //   toggleWrap.value = 'songlist';
+  // }
+}
+
+function backToPlayList() {
+  if(route.fullPath.match(/songlist/)){
+    currentUrl.value = '/playlist';
+    console.log(currentUrl.value);
+    router.replace({
+        name:'PlayList'
+    })
   }
 }
 

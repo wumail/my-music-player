@@ -1,3 +1,4 @@
+//main.js
 import { createApp } from 'vue'
 import store from './store'
 import router from './router'

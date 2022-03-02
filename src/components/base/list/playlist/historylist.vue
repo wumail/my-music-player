@@ -10,44 +10,23 @@ export default {
 }
 </script>
 <script setup>
-import { reactive } from "vue";
+import { reactive, watchEffect } from "vue";
 
 import ListComp from '../index.vue';
+import { useStore } from 'vuex';
+
+const store = useStore();
 
 const songs = reactive(
     {
         songlist:[
-            {
-                name:'Shine On You Crazy Diamond',
-                artist:'Pink Floyd',
-                scr:'https://music.163.com/song/media/outer/url?id=4235845.mp3',
-            },
-            {
-                name:'Comfotably Numb',
-                artist:'Pink Floyd',
-                scr:'https://music.163.com/song/media/outer/url?id=28238311.mp3',
-
-            },
-            {
-                name:'Jazz Suite No.2:Waltz No.2',
-                artist:'The City of Prague Philharmonic Orchestra',
-                scr:'https://music.163.com/song/media/outer/url?id=518649049.mp3',
-            },
-            {
-                name:'静止',artist:'杨乃文',
-                scr:'https://music.163.com/song/media/outer/url?id=316103.mp3',
-            },
-            {
-                name:'星星堆满天',artist:'杨乃文',
-                scr:'https://music.163.com/song/media/outer/url?id=316103.mp3',
-            },
-            {
-                name:'Silence',artist:'杨乃文',
-                scr:'https://music.163.com/song/media/outer/url?id=316084.mp3',
-            },
         ]
     }
 )
+
+watchEffect(()=>{
+    songs.songlist = store.getters['playerNsong/historyList'];
+})
 </script>
 
 <style lang="scss">

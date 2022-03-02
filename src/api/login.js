@@ -7,3 +7,19 @@ export function net163_login(data) {
         data
     })
 }
+
+export function userLogin(data) {
+    return service.request({
+        method: "post",
+        url: "/user/login/",
+        data
+    })
+}
+
+export function userRegister(data) {
+    return service.request({
+        method: "post",
+        url: "/user/register/",
+        data
+    })
+}

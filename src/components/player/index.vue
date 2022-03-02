@@ -4,38 +4,43 @@
       <div class="album">
         <div class="album-cover ">
           <img
-            src="https://ae01.alicdn.com/kf/HTB1G5m9qb1YBuNjSszeq6yblFXad/paper-tropical-leaves-monstera-palm-green-photo-backdrop-Vinyl-cloth-High-quality-Computer-print-wall-background.jpg"
+            :src='current.song.albumImg'
             alt="image"
           >
         </div>
         <div class="album-info ">
           <span class="artist">
             <i class="iconfont icon-artist"></i>
-            Pink Floyd
+            {{current.song.artist}}
           </span>
           <span class="collection">
             <i class="iconfont icon-album"></i>
-            Wish You Were Here</span>
+            {{current.song.album?current.song.album:'暂无专辑信息'}}</span>
           <div class="source-from">
-            from<span>qq音乐</span> <i class="music-icon netease"></i>
+            from<span>网易云音乐</span> <i class="music-icon netease"></i>
             <!-- <i class="music-icon netease"></i> -->
           </div>
         </div>
       </div>
       <div class="lyric-info">
-        <div class="song">Shine On You Crazy Diamond</div>
-        <div class="lyric"> Remember when you were young,<br /> you shone like the sun.<br />
-          Shine on you crazy diamond.<br />
-          Now there's a look in your eyes, <br />like black holes in the sky.<br />
-          Shine on you crazy diamond.<br />
-          You were caught in the crossfire of childhood and stardom,<br /> blown on the steel breeze.<br />
-          Come on you target for faraway laughter, <br />come on you stranger, <br />you legend, you martyr, and shine!<br />
-          You reached for the secret too soon, <br />you cried for the moon.<br />
-          Shine on you crazy diamond.<br />
-          Threatened by shadows at night, <br />and exposed in the light.<br />
-          Shine on you crazy diamond.<br />
-          Well you wore out your welcome with random precision, <br />rode on the steel breeze.<br />
-          Come on you raver,<br /> you seer of visions,<br /> come on you painter, you piper, you prisoner, and shine!</div>
+        <div class="song">{{current.song.name}}</div>
+        <div class="lyric">
+          <ul
+            class="lyric-ul"
+            ref="ulRef"
+          >
+            <li
+              v-for="(lyric,index) in current.song.lyric?.lrc"
+              :key="lyric.id"
+              :class="{curLyric:index == current.index.index-1}"
+            >
+              <!-- <span> -->
+              {{lyric.lyric}}
+              <!-- </span> -->
+            </li>
+            <!-- <li v-else-if="!lyric">暂无歌词</li> -->
+          </ul>
+        </div>
       </div>
     </div>
     <div class="player">
@@ -133,14 +138,14 @@
 </template>
 
 <script setup>
-import { computed, defineEmit, defineProps, onMounted, reactive, ref, toRefs, watch } from "vue";
+import { computed, defineEmit, defineProps, nextTick, onMounted, reactive, ref, toRefs, watch, watchEffect } from "vue";
 import { mapGetters, mapMutations, mapActions, useStore } from 'vuex'
 
 import Icon from '@/components/base/icon/index.vue';
 import {changeMode} from '@/utils/mode.js';
 import {transTime} from '@/utils/transTime.js';
 import {throttle} from '@/utils/common.js';
-import {playIcon,pauseIcon} from '@//utils/icon.js';
+import {playIcon,pauseIcon} from '@/utils/icon.js';
 import {getRandom} from '@/utils/random.js';
 import { useRouter } from "vue-router";
 
@@ -148,6 +153,8 @@ const store = useStore();
 const router = useRouter();
 // console.log(store);
 const emit = defineEmit(['togglePlayList']);
+
+
 
 let modecount = ref(0);
 let ifpause = ref(true);
@@ -159,21 +166,62 @@ const pauseModel =reactive({
   0:{icon:'play',title:'播放'},
   1:{icon:'pause',title:'暂停'},
 })
-
+let outimg = 'https://ae01.alicdn.com/kf/HTB1G5m9qb1YBuNjSszeq6yblFXad/paper-tropical-leaves-monstera-palm-green-photo-backdrop-Vinyl-cloth-High-quality-Computer-print-wall-background.jpg';
 const playerData =reactive(
   {
     songs:[
-      'https://music.163.com/song/media/outer/url?id=518649049.mp3',
-      'https://music.163.com/song/media/outer/url?id=28238311.mp3',
-      'https://music.163.com/song/media/outer/url?id=316088.mp3',
-      'https://music.163.com/song/media/outer/url?id=316103.mp3',
-      'https://music.163.com/song/media/outer/url?id=4235845.mp3',
-      'https://music.163.com/song/media/outer/url?id=316084.mp3'
+      // {
+      //   name:'1',
+      //   album:'1',
+      //   albumImg:outimg,
+      //   artist:'1',
+      //   id:518649049,
+      //   song_url:'https://music.163.com/song/media/outer/url?id=518649049.mp3'
+      // },
+      // {
+      //   name:'2',
+      //   album:'2',
+      //   albumImg:outimg,
+      //   artist:'2',
+      //   id:28238311,
+      //   song_url:'https://music.163.com/song/media/outer/url?id=28238311.mp3'
+      // },
+      // {
+      //   name:'3',
+      //   album:'3',
+      //   albumImg:outimg,
+      //   artist:'3',
+      //   id:316088,
+      //   song_url:'https://music.163.com/song/media/outer/url?id=316088.mp3'
+      // },
+      // {
+      //   name:'4',
+      //   album:'4',
+      //   albumImg:outimg,
+      //   artist:'4',
+      //   id:316103,
+      //   song_url:'https://music.163.com/song/media/outer/url?id=316103.mp3'
+      // },
+      // {
+      //   name:'5',
+      //   album:'5',
+      //   albumImg:outimg,
+      //   artist:'5',
+      //   id:4235845,
+      //   song_url:'https://music.163.com/song/media/outer/url?id=4235845.mp3'
+      // },
+      // {
+      //   name:'6',
+      //   album:'6',
+      //   albumImg:outimg,
+      //   artist:'6',
+      //   id:316084,
+      //   song_url:'https://music.163.com/song/media/outer/url?id=316084.mp3'
+      // }
     ],
     length:0,
   }
 )
-
 
 let audio = ref(null);
 const audioInfo = reactive(
@@ -222,6 +270,16 @@ const iconItems = reactive(
 )
 // console.log(ad);
 
+let current = reactive(
+  {
+    song:{},
+    index:{
+      time:0,
+      index:0
+    },
+  }
+)
+let ulRef = ref('');
 let WIDTH = 390;
 let VOLUME_HIGHT = 158;
 let progress_move = false;
@@ -250,23 +308,41 @@ watch(
     },
 )
 
+// watchEffect(()=>{
+//     audioInfo.volume = store.getters['playerNsong/volume'];
+//     volume_bar.style.marginBottom = audioInfo.volume*VOLUME_HIGHT + 'px';
+// })
+
 onMounted(()=>{
     audio = document.querySelector('#music');
-    volume_bar.style.marginBottom = audio.volume*VOLUME_HIGHT + 'px';
-    setPlayList()
+    // volume_bar.style.marginBottom = audio.volume*VOLUME_HIGHT + 'px';
+    // volume_progress.style.height = audioInfo.volume*VOLUME_HIGHT + 'px';
+    // initUser()
     volumeSet()
+    initMode()
     ifvolume()
+    setPlayList()
     setSong()
 })
 
+
 function play(){
-    audio.play();
+    nextTick(()=>{
+      matchLyricByTime();
+      audio.play();
+    }).catch(err=>{
+      console.log(err);
+    })
     let flag = 1;
     pauseIconSet(flag)
 }
 
 function pause(){
-    audio.pause();
+    nextTick(()=>{
+      audio.pause();
+    }).catch(err=>{
+      console.log(err);
+    })
     let flag = 0;
     pauseIconSet(flag)
 }
@@ -296,15 +372,36 @@ function getBufferd(buffered){
     return bufferPercent;
 }
 
-function updateTime(){
-    audioInfo.currentime = audio.currentTime;
-    audioInfo.current = transTime(audio.currentTime);
-    if(!ifpause.value && audioInfo.currentime >= audioInfo.duration){
-      let playmode = store.getters['playerNsong/mode'];
-      playmode === 0?loop():
-      playmode === 1?single():random();
+function matchLyricByTime() {
+  if(current.song.lyric.lrc){
+    let lrc = current.song.lyric?.lrc;
+    let currTime  = audio.currentTime;
+    for (const key in lrc) {
+      if(lrc[key].time >= currTime){
+        current.index.time = lrc[key].time;
+        current.index.index = key;
+        break;
+      }
     }
-    progressSet();
+  }
+}
+
+function updateTime(){
+  audioInfo.currentime = audio.currentTime;
+  audioInfo.current = transTime(audio.currentTime);
+  if(current.index.time <= audioInfo.currentime && current.song.lyric.lrc[current.index.index]){
+    // console.log(current.index.time,audioInfo.currentime);
+    current.index.index++;
+    current.index.time = current.song.lyric.lrc[current.index.index].time;
+    // console.log(ulRef);
+    ulRef.value.style.transform = `translateY(${-(100 * (current.index.index-1))}px)`;
+  }
+  // console.log(current.index);
+  if(!ifpause.value && audioInfo.currentime >= audioInfo.duration){
+    let playmode = store.getters['playerNsong/mode'];
+    playmode === 0?loop():playmode === 1?single():random();
+  }
+  progressSet();
 }
 
 function loop() {
@@ -319,9 +416,8 @@ function loop() {
 
 function single() {
     console.log('single');
-    audio.currentTime = 0;
-    progressReset()
-    play()
+    let index = store.getters['playerNsong/currentIndex'];
+    setNewSong(index);
 }
 
 function random() {
@@ -331,13 +427,31 @@ function random() {
 }
 
 function setPlayList() {
+    playerData.songs = store.getters['playerNsong/historyList'];
     playerData.length = playerData.songs.length;
     store.commit('playerNsong/SET_PLAYLIST',playerData.songs);
   // console.log(store.getters['playerNsong/playlist']);
 }
 
-function setSong(){
-    audio.src = store.getters['playerNsong/currentMusic'];
+
+const list = reactive(
+  {
+    data:[]
+  }
+)
+watchEffect(()=>{
+  list.data = store.getters['playerNsong/currentMusic'];
+  playerData.songs = store.getters['playerNsong/historyList'];
+  setSong(list.data); 
+})
+
+function setSong(cur){
+    cur = cur?cur:store.getters['playerNsong/currentMusic'];
+    console.log(cur);
+    console.log(audio.src);
+    current.song = cur;
+    audio.src = cur.song_url;
+
 }
 
 function setNewSong(n){
@@ -368,7 +482,14 @@ function next(){
     setNewSong(index)
 }
 
-function Mode(e){
+function initMode() {
+  modecount.value = store.getters['playerNsong/mode'];
+  const v = changeMode(modecount.value);
+  iconItems.mode.title = v.title;
+  iconItems.mode.type = v.icon;
+}
+
+function Mode(){
     modecount.value++;
     modecount.value = modecount.value%3;
     store.commit('playerNsong/SET_PLAYMODE',modecount.value);
@@ -386,11 +507,11 @@ function togglePause(e){
 
 function togglePlayList() {
     emit('togglePlayList')
-    router.push(
-      {
-        name:'SearchList'
-      }
-    )
+    // router.push(
+    //   {
+    //     name:'SearchList'
+    //   }
+    // )
 }
 
 function toggleVolume(){
@@ -467,7 +588,9 @@ function volumeCompute(){
 
 function volumeSet() {
   volume_bar.style.marginBottom = audioInfo.volume*VOLUME_HIGHT + 'px';
-  volume_progress.style.height = audioInfo.volume*VOLUME_HIGHT + 'px';
+  volume_progress.style.height = (166-audioInfo.volume*VOLUME_HIGHT) + 'px';
+  audio.volume = audioInfo.volume;
+  // console.log(audio.volume);
 }
 
 function volume_movebegin () {
@@ -479,11 +602,11 @@ function volume_moveout () {
     volume_move = false
     if (volume_clickmove) {
       let newPercent = Math.ceil(((volume_mouseStartY) / (VOLUME_HIGHT+6)) * 100)
-      let a = newPercent * 0.01;
-      if(a>=0.95){
+      let a = newPercent * 0.01; 
+      if(a>=0.999){
         a = 1;
         iconItems.voice.type = 'sound-max';
-      }else if(a<=0.05){
+      }else if(a<=0.001){
         a = 0;
         iconItems.voice.type = 'mute';
         iconItems.voice.title = '禁音';
@@ -494,6 +617,12 @@ function volume_moveout () {
     }
     volume_clickmove = false;
 }
+
+// function volunmComput(){
+//   let newPercent = Math.ceil(((volume_mouseStartY) / (VOLUME_HIGHT+6)) * 100)
+//   let newVolume = newPercent * 0.01; 
+//   return newVolume;
+// }
 
 function volume_throttleStart(e) {
     if (volume_move) {
@@ -546,6 +675,7 @@ function volume_movestart (e) {
       justify-content: space-around;
       align-items: center;
       width: 45%;
+
       .album-cover {
         img {
           width: 120px;
@@ -555,6 +685,7 @@ function volume_movestart (e) {
       }
 
       .album-info {
+        margin-left: 10px;
         display: flex;
         flex-direction: column;
         font-family: monospace;
@@ -599,7 +730,8 @@ function volume_movestart (e) {
         margin-bottom: 20px;
       }
       .lyric {
-        text-shadow: 1px 1px 5px rgba(71, 71, 71, 0.7);
+        font-size: 12px;
+        // text-shadow: 1px 1px 5px rgba(71, 71, 71, 0.7);
         line-height: 22px;
         // background: #000;
         height: 80%;
@@ -763,5 +895,23 @@ function volume_movestart (e) {
       }
     }
   }
+}
+
+.lyric-ul {
+  transition: all 0.32s ease;
+  margin-top: 120px;
+  li {
+    display: flex;
+    flex-direction: column;
+    height: 100px;
+    justify-content: center;
+    // flex-wrap: wrap;
+  }
+}
+
+.curLyric {
+  color: orange;
+  font-size: 16px;
+  font-weight: bold;
 }
 </style>

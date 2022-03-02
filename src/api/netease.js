@@ -8,6 +8,14 @@ export function net163_playlist(data) {
     })
 }
 
+export function net163_user_detail(data) {
+    return service.request({
+        method: "post",
+        url: "/net163/user_detail/",
+        data
+    })
+}
+
 export function net163_playlist_detail(data) {
     return service.request({
         method: "post",
@@ -20,6 +28,14 @@ export function net163_song_url(data) {
     return service.request({
         method: "post",
         url: "/net163/song_url/",
+        data
+    })
+}
+
+export function net163_song_detail(data) {
+    return service.request({
+        method: "post",
+        url: "/net163/song_detail",
         data
     })
 }

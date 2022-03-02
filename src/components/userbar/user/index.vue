@@ -1,6 +1,6 @@
 <template>
   <div>
-    <User
+    <!-- <User
       v-if="wrap==='user'"
       ref="userRef"
     />
@@ -11,21 +11,27 @@
     <Songlist
       v-else-if="wrap==='songlist'"
       ref="songlistRef"
-    />
+    /> -->
+    <router-view v-slot="{ Component }">
+      <keep-alive>
+        <component :is="Component" />
+      </keep-alive>
+    </router-view>
   </div>
 </template>
 
 <script setup>
-import { defineProps, inject, ref, watch } from "vue";
+// import { reactive,provide,onMounted, watchEffect, ref } from "vue";
 import Favorite from './favorite.vue';
 import User from './user.vue';
 import Songlist from './songlist.vue';
 
-let userRef = ref();
-let favoriteRef = ref();
-let songlistRef = ref();
 
-let wrap = inject('wrap');
+// let userRef = ref();
+// let favoriteRef = ref();
+// let songlistRef = ref();
+
+// let wrap = inject('wrap');
 </script>
 <style lang="scss">
 </style>
