@@ -10,10 +10,7 @@
       >
         <div class="playlist-bar">
           <div class="playlist-topbar">
-            <Icon
-              :iconinfo='iconItems.back'
-              @click="back"
-            />
+
             <el-input
               v-model="searchAbout.searchInput"
               class="topbar-input"
@@ -194,7 +191,7 @@ function search() {
   net163_search({
     keywords:searchAbout.searchInput
   }).then((res)=>{
-    // console.log(res);
+    console.log(res);
     const resInfo = [];
     res.forEach(res => {
       resInfo.push({

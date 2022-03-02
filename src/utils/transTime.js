@@ -13,3 +13,17 @@ export function transTime(time) {
     }
     return minute + isM0 + sec
 }
+
+export function formatLyricTime(time) {
+    // console.log(time);
+    const reg = /\[|\|\s]/g;
+    let timeArr = time.replaceAll(reg, '').split(':');
+    let [min, secNms] = timeArr;
+    let secArr = secNms.split('.');
+    let [sec, ms] = secArr;
+    if (+min >= 0) {
+        let lyrictime = +`${+min * 60 + +sec}.${ms}`;
+        // console.log(lyrictime);
+        return lyrictime;
+    }
+}

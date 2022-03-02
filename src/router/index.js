@@ -18,7 +18,25 @@ const routes = [
                         component: () => import('@/components/userbar/user/user.vue'),
                         meta: {
                             keepAlive: true
-                        }
+                        },
+                        children: [
+                            {
+                                path: '/login',
+                                name: 'Login',
+                                component: () => import('@/components/userbar/user/setting/user.vue'),
+                                meta: {
+                                    keepAlive: true
+                                },
+                            },
+                            {
+                                path: '/account',
+                                name: 'Account',
+                                component: () => import('@/components/userbar/user/setting/account.vue'),
+                                meta: {
+                                    keepAlive: true
+                                },
+                            }
+                        ]
                     },
                     {
                         path: '/favorite',
@@ -34,7 +52,26 @@ const routes = [
                         component: () => import('@/components/userbar/user/songlist.vue'),
                         meta: {
                             keepAlive: true
-                        }
+                        },
+                        redirect: 'playlist',
+                        children: [
+                            {
+                                path: '/playlist',
+                                name: 'PlayList',
+                                component: () => import('@/components/userbar/user/songlist/playlist.vue'),
+                                meta: {
+                                    keepAlive: true
+                                },
+                            },
+                            {
+                                path: '/songlist/:id',
+                                name: 'Songlist',
+                                component: () => import('@/components/userbar/user/songlist/songlist.vue'),
+                                // meta: {
+                                //     keepAlive: true
+                                // },
+                            }
+                        ]
                     },
                 ]
             },

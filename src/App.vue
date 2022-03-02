@@ -1,3 +1,4 @@
+
 <template>
   <div class="global-theme">
     <!-- <img
@@ -18,7 +19,7 @@
 // Check out https://github.com/vuejs/rfcs/blob/script-setup-2/active-rfcs/0000-script-setup.md
 </script>
 
-<style>
+<style lang="scss">
 .global-theme {
   /* color: aliceblue !important; */
   /* background: #2c3e50; */
@@ -31,4 +32,5 @@
   color: #2c3e50;
   margin-top: 60px;
 }
+
 </style>

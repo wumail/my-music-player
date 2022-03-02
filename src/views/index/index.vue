@@ -25,35 +25,33 @@
 </template>
 
 <script setup>
-import { provide, reactive, ref } from 'vue';
+import { onMounted, provide, reactive, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+
+import Icon from '@/components/base/icon/index.vue';
 import UserBar from '@/components/userbar/index.vue';
 import Player from '@/components/player/index.vue';
 import PlayList from '@/components/playlist/index.vue';
-import { useRoute, useRouter } from 'vue-router';
 
 const router = useRouter();
 const route = useRoute();
 let showPlayList = ref(false);
 
-const song = reactive(
-  {
-    
-  }
-)
+
 
 provide('showPlayList',showPlayList)
 
 function togglePlayList() {
   showPlayList.value = !showPlayList.value;
-  if(!showPlayList.value){
-    router.go(-(history.length-2));
-    router.replace({ path: "/" });
-  }
+  // if(!showPlayList.value){
+  //   router.go(-(history.length-2));
+  //   router.replace({ path: "/" });
+  // }
 }
 
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .left {
   z-index: 0;
 }

@@ -33,6 +33,7 @@ watchEffect(()=>{
 })
 
 function setData() {
+    // console.log(songs.songlist);
     songs.songlist.forEach(song => {
         let artist = '';
         for(let i = 0 ; i<song?.artists.length;i++){
