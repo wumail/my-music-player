@@ -37,6 +37,46 @@ const router = useRouter();
 const route = useRoute();
 let showPlayList = ref(false);
 
+const panelItems = reactive(
+  [
+    {
+      item:{
+        type:'listplay',
+        size:32,
+      },
+      txt:'播放歌曲'
+    },
+    {
+      item:{
+        type:'favorite',
+        size:32,
+      },
+      txt:'添加至喜爱',  
+    },
+    {
+      item:{
+        type:'add',
+        size:32,
+      },
+      txt:'添加至歌单'
+    },
+    {
+      item:{
+        type:'mv1',
+        size:32,
+      },
+      txt:'相关视频'
+    },
+    {
+      item:{
+        type:'delete',
+        size:32,
+      },
+      txt:'删除曲目',
+      route:'SearchList'
+    }
+  ]
+)
 
 
 provide('showPlayList',showPlayList)

@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import { defineProps, inject, onBeforeMount, reactive, ref, watchEffect } from "vue";
+import { defineProps, inject, nextTick, onBeforeMount, reactive, ref, watchEffect } from "vue";
 import { useRoute,useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { ElMessage } from 'element-plus'
@@ -53,11 +53,16 @@ watchEffect(()=>{
 })
 
 function initlist() {
-    songs.songlist = props.songlist;
+  songs.songlist = props.songlist;
+  getSongDetail(songs.songlist)
+  
 }
+
 
 onBeforeMount(()=>{
     initlist()
+    // console.log('----------');
+    // console.log(songs.songlist);
 })
 
 const iconItems = reactive(
@@ -78,8 +83,6 @@ function toggleDrawer(data) {
     console.log(data);
     drawer.value = !drawer.value
 }
-
-
 
 async function getItem(data,index) {
   // console.log(data);
@@ -142,6 +145,32 @@ async function getItem(data,index) {
   // });
 }
 
+async function getSongDetail(list){
+  try {
+    const promises = list.map(baseFetch);
+    await Promise.all(promises)
+    nextTick(()=>{
+      console.log('渲染完成');
+    })
+    // console.log(songs.songlist);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function baseFetch(item) {
+  let result = await net163_song_detail({id:`${item.id}`});
+  let data = result.body.songs[0];
+  item.album = data.al.name;
+  item.albumImg = data.al.picUrl;
+  item.name = data.name;
+  let artist = '';
+  for(let i = 0 ; i<data?.ar.length;i++){
+      artist += `${data?.ar[i].name}/`
+  }
+  item.artist = artist;
+}
+
 async function getPicUrl(id) {
   try {
     let result = await net163_song_detail({id:`${id}`})
@@ -156,6 +185,7 @@ async function getDetail(id) {
     let response = await net163_song_url({
       id
     });
+    console.log(response);
     if(response.status === 404){
         ElMessage.warning({
               message: response.body.message,
@@ -202,7 +232,7 @@ function lyricHandler(lyric) {
   // const regTime = /\[\d{2}:\d{2}.\d{2,3}\]/;
   const lineArr = {};
   const lyricsObj = {};
-  // console.log(lyric);
+  if(!lyric.lrc.lyric) return false
   for(let key in lyric) {
     lineArr[key]=lyric[key].lyric.split(reg);
     lyricsObj[key] = [];
@@ -229,7 +259,7 @@ function lyricHandler(lyric) {
       }
      });
   }
-  // console.log(lyricsObj);
+  console.log(lyricsObj);
   return lyricsObj;
 }
 

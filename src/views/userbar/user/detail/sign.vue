@@ -150,6 +150,8 @@ const LOR =reactive(
     }
 )
 
+console.log(LOR);
+
 const userModel = reactive(
     {
         username:'',

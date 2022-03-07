@@ -6,10 +6,11 @@
       :key="song.id"
       @dblclick="getItem(song,index)"
     >
-      <span class="songindex"> {{index+1}}</span>
-      <span class="songname">{{song.name}}
+      <div class="songindex"> {{index+1}}</div>
+      <div class="songname">
+        <span>{{song.name}}</span>
         <span class="songartist">{{song.artist}}</span>
-      </span>
+      </div>
       <Icon
         :iconinfo='iconItems.more'
         @click='toggleDrawer(song)'
@@ -19,7 +20,7 @@
 </template>
 
 <script setup>
-import { defineProps, inject, nextTick, onBeforeMount, reactive, ref, watchEffect } from "vue";
+import { defineProps, inject, onBeforeMount, reactive, ref, watchEffect } from "vue";
 import { useRoute,useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { ElMessage } from 'element-plus'
@@ -36,7 +37,7 @@ const props = defineProps(
     {
         songlist:{
             type:Array,
-            default:()=>{}
+            default:()=>[]
         },
     }
 )
@@ -53,16 +54,11 @@ watchEffect(()=>{
 })
 
 function initlist() {
-  songs.songlist = props.songlist;
-  getSongDetail(songs.songlist)
-  
+    songs.songlist = props.songlist;
 }
-
 
 onBeforeMount(()=>{
     initlist()
-    // console.log('----------');
-    // console.log(songs.songlist);
 })
 
 const iconItems = reactive(
@@ -83,6 +79,8 @@ function toggleDrawer(data) {
     console.log(data);
     drawer.value = !drawer.value
 }
+
+
 
 async function getItem(data,index) {
   // console.log(data);
@@ -145,32 +143,6 @@ async function getItem(data,index) {
   // });
 }
 
-async function getSongDetail(list){
-  try {
-    const promises = list.map(baseFetch);
-    await Promise.all(promises)
-    nextTick(()=>{
-      console.log('渲染完成');
-    })
-    // console.log(songs.songlist);
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-async function baseFetch(item) {
-  let result = await net163_song_detail({id:`${item.id}`});
-  let data = result.body.songs[0];
-  item.album = data.al.name;
-  item.albumImg = data.al.picUrl;
-  item.name = data.name;
-  let artist = '';
-  for(let i = 0 ; i<data?.ar.length;i++){
-      artist += `${data?.ar[i].name}/`
-  }
-  item.artist = artist;
-}
-
 async function getPicUrl(id) {
   try {
     let result = await net163_song_detail({id:`${id}`})
@@ -185,6 +157,7 @@ async function getDetail(id) {
     let response = await net163_song_url({
       id
     });
+    console.log(response);
     if(response.status === 404){
         ElMessage.warning({
               message: response.body.message,
@@ -231,12 +204,13 @@ function lyricHandler(lyric) {
   // const regTime = /\[\d{2}:\d{2}.\d{2,3}\]/;
   const lineArr = {};
   const lyricsObj = {};
-  // console.log(lyric);
+  if(!lyric.lrc.lyric) return false
   for(let key in lyric) {
-    lineArr[key]=lyric[key].lyric.split(reg);
+    // console.log(lyric[key]);
+    lineArr[key]=lyric[key]?.lyric.split(reg);
     lyricsObj[key] = [];
     lineArr[key].forEach(ele => {
-      // console.log(ele);
+      console.log(ele);
       if (ele === '') return
       const [time,lyric] = ele.split(']');
       // console.log(time,lyric);
@@ -265,4 +239,48 @@ function lyricHandler(lyric) {
 </script>
 
 <style lang="scss">
+.songlist {
+    height: inherit;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    //   background: #ccc;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+    &::-webkit-scrollbar {
+      width: 0px;
+    }
+    .songitem {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      width: inherit;
+      height: 50px;
+      border-radius: 3px;
+      line-height: 50px;
+      border-bottom: 1px solid #cccccc54;
+      .iconfont {
+        margin-left: 10px;
+      }
+      // border-bottom: 1px solid rgba($color: #000000, $alpha: 0.3);
+      .songindex {
+        margin-left: 5px;
+        margin-right: 10px;
+        width: 15px;
+      }
+      .songname {
+        line-height: 15px;
+        height: 30px; 
+        flex: 1;
+        // overflow-y: scroll;
+        &::-webkit-scrollbar {
+          width: 0px;
+        }
+        .songartist {
+          display: block;
+          font-size: 10px;
+        }
+      }
+    }
+  }
+
 </style>

@@ -26,6 +26,7 @@
         <div class="song">{{current.song.name}}</div>
         <div class="lyric">
           <ul
+            v-if="current.song.lyric"
             class="lyric-ul"
             ref="ulRef"
           >
@@ -38,8 +39,8 @@
               {{lyric.lyric}}
               <!-- </span> -->
             </li>
-            <!-- <li v-else-if="!lyric">暂无歌词</li> -->
           </ul>
+          <span >暂无歌词</span>
         </div>
       </div>
     </div>
@@ -148,6 +149,9 @@ import {throttle} from '@/utils/common.js';
 import {playIcon,pauseIcon} from '@/utils/icon.js';
 import {getRandom} from '@/utils/random.js';
 import { useRouter } from "vue-router";
+import defaultAlbum from '../../assets/asuka.jpeg';
+import { ElMessage } from 'element-plus'
+
 
 const store = useStore();
 const router = useRouter();
@@ -308,10 +312,11 @@ watch(
     },
 )
 
-// watchEffect(()=>{
-//     audioInfo.volume = store.getters['playerNsong/volume'];
-//     volume_bar.style.marginBottom = audioInfo.volume*VOLUME_HIGHT + 'px';
-// })
+watchEffect(()=>{
+    current.song = store.getters['playerNsong/currentMusic'];
+    play()
+    // volume_bar.style.marginBottom = audioInfo.volume*VOLUME_HIGHT + 'px';
+})
 
 onMounted(()=>{
     audio = document.querySelector('#music');
@@ -389,15 +394,18 @@ function matchLyricByTime() {
 function updateTime(){
   audioInfo.currentime = audio.currentTime;
   audioInfo.current = transTime(audio.currentTime);
-  if(current.index.time <= audioInfo.currentime && current.song.lyric.lrc[current.index.index]){
+  // console.log(current.song.lyric);
+  if( current.index.time <= audioInfo.currentime && current.song.lyric.lrc[current.index.index]){
     // console.log(current.index.time,audioInfo.currentime);
     current.index.index++;
-    current.index.time = current.song.lyric.lrc[current.index.index].time;
+    current.index.time = current.song.lyric.lrc[current.index.index]?.time || 0;
     // console.log(ulRef);
     ulRef.value.style.transform = `translateY(${-(100 * (current.index.index-1))}px)`;
   }
   // console.log(current.index);
+  // console.log(!ifpause.value,audioInfo.currentime ,audioInfo.duration,audioInfo.currentime >= audioInfo.duration);
   if(!ifpause.value && audioInfo.currentime >= audioInfo.duration){
+    console.log('will change');
     let playmode = store.getters['playerNsong/mode'];
     playmode === 0?loop():playmode === 1?single():random();
   }
@@ -447,9 +455,10 @@ watchEffect(()=>{
 
 function setSong(cur){
     cur = cur?cur:store.getters['playerNsong/currentMusic'];
-    console.log(cur);
+    console.log(cur.name);
     console.log(audio.src);
     current.song = cur;
+    current.song.albumImg = current.song.albumImg ? current.song.albumImg : defaultAlbum;
     audio.src = cur.song_url;
 
 }
@@ -534,6 +543,7 @@ function progressSet(){
 }
 
 function progressReset(){
+    progress_buffered.style.width = `0px`
     progress_played.style.width =`0px`;
     progress_bar.style.marginLeft = `3px`
 }

@@ -139,6 +139,16 @@ const router = useRouter();
 let username = inject('username');
 let qqmusicCookie = ref('');
 
+let userinfo = reactive(
+  {
+    username: "未登录",
+    net163_nickname: "未登录",
+    net163_usercookie: "",
+    net163_userid: "未登录",
+    net163_username: "未登录"
+  }
+)
+
 let net163Ref = ref('');
 let qqRef = ref('');
 
@@ -154,7 +164,12 @@ watchEffect(()=>{
   qqmusicCookie = store.getters['playerNsong/qqmusicCookie'];
   // net163.uid = store.getters['playerNsong/net163UID'];
   // net163.cookie = store.getters['playerNsong/net163Cookie'];
-  net163.info = JSON.parse(store.getters['playerNsong/net163Userinfo']);
+  try {
+    net163.info = JSON.parse(store.getters['playerNsong/net163Userinfo']);
+  } catch (error) {
+    net163.info = userinfo
+  }
+
   // console.log(net163.info);
 })
 
