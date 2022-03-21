@@ -14,6 +14,7 @@
       <div :class="{hidden:!bigwrap,transparent:!bigwrap}">
         <div class="userbar-topbar">
           <Icon
+            v-if="route.name === 'Songlist'"
             :iconinfo='iconItems.back'
             @click="backToPlayList"
           />
@@ -75,35 +76,15 @@ import Userbar from './user/index.vue';
 const store = useStore();
 const router = useRouter();
 const route = useRoute();
+
 let currentUrl = ref('');
-// console.log(route);
-
-onBeforeRouteUpdate((to,from) =>{
-  // console.log(to.fullPath,from.fullPath)
-  // console.log(currentUrl.value);
-  if(from.fullPath.match(/songlist/) && to.fullPath !== '/playlist'){
-    currentUrl.value = from.fullPath
-  }
-  if(to.fullPath == '/playlist' && currentUrl.value != '/playlist'){
-    if(currentUrl.value != ''){
-      router.push(currentUrl.value)
-      return false;
-    }
-  }
-})
-
-
-let username = store.getters['playerNsong/username'];
-
-watchEffect(()=>{
-  username = store.getters['playerNsong/username']
-})
-provide('username',username)
-
 let bigwrap = ref(false);
 let k_roll =ref(false);
 let drawer = ref(false);
 provide('drawer',drawer)
+
+let username = store.getters['playerNsong/username'];
+provide('username',username)
 
 const iconItems = reactive(
   {
@@ -159,9 +140,26 @@ const panelItems = reactive(
   ]
 )
 
-
 const toggleWrap = ref('user');
 // provide('wrap',toggleWrap);
+
+onBeforeRouteUpdate((to,from) =>{
+  // console.log(to.fullPath,from.fullPath)
+  // console.log(currentUrl.value);
+  if(from.fullPath.match(/songlist/) && to.fullPath !== '/playlist'){
+    currentUrl.value = from.fullPath
+  }
+  if(to.fullPath == '/playlist' && currentUrl.value != '/playlist'){
+    if(currentUrl.value != ''){
+      router.push(currentUrl.value)
+      return false;
+    }
+  }
+})
+
+watchEffect(()=>{
+  username = store.getters['playerNsong/username']
+})
 
 onMounted(()=>{
   ifpanel()
@@ -196,7 +194,7 @@ function toUser() {
 }
 
 function toFavorite() {
-   router.push({
+  router.push({
     name:'Favorite'
   })
   // if(toggleWrap.value!=='favorite'){
@@ -206,7 +204,7 @@ function toFavorite() {
 
 function toSonglist() {
   router.push({
-      name:'PlayList'
+    name:'PlayList'
   })
   // if(toggleWrap.value!=='songlist'){
   //   toggleWrap.value = 'songlist';

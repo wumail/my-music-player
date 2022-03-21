@@ -9,7 +9,7 @@ export default {
 }
 </script>
 <script setup>
-import { defineProps, inject, nextTick, reactive, ref, watchEffect } from "vue";
+import { defineProps, inject, nextTick, onBeforeMount, reactive, ref, watchEffect } from "vue";
 import ListComp from '../index.vue';
 
 const props = defineProps(
@@ -31,6 +31,7 @@ watchEffect(()=>{
     songs.songlist = props.searchRes;
     setData()
 })
+
 
 function setData() {
     // console.log(songs.songlist);

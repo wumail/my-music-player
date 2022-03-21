@@ -25,18 +25,18 @@
           <div class="playlist-navbar">
             <Icon
               :iconinfo='iconItems.searchlist'
-              :class="{navActive:playlistFlag==='SearchList'}"
-              @click="toSearchList"
+              :class="{navActive:playlistFlag === 'SearchList'}"
+              @click="toggleList('SearchList')"
             />
             <Icon
               :iconinfo='iconItems.playlist'
-              :class="{navActive:playlistFlag==='PlayList'}"
-              @click="toPlayList"
+              :class="{navActive:playlistFlag === 'PlayList'}"
+              @click="toggleList('PlayList')"
             />
             <Icon
               :iconinfo='iconItems.historylist'
-              :class="{navActive:playlistFlag==='HistoryList'}"
-              @click="toHistoryList"
+              :class="{navActive:playlistFlag === 'HistoryList'}"
+              @click="toggleList('HistoryList')"
             />
           </div>
         </div>
@@ -66,12 +66,12 @@
 </template>
 
 <script setup>
-import { ref,defineProps, watch, reactive, provide, onMounted } from "vue";
+import { ref,defineProps, watch, reactive, provide, onMounted, onBeforeMount } from "vue";
 import { onBeforeRouteUpdate, useRoute, useRouter } from "vue-router";
 
 import Icon from '@/components/base/icon/index.vue';
 import PlayList from '@/components/base/list/playlist/index.vue';
-import { net163_search } from "@/api/netease.js";
+import { net163_search, net163_top_song } from "@/api/netease.js";
 
 const router = useRouter();
 const route = useRoute();
@@ -81,6 +81,7 @@ const props = defineProps({
         default:false
     }
 })
+
 let playlistFlag = ref('SearchList');
 let showPlayList = ref(false);
 let drawer = ref(false);
@@ -172,6 +173,11 @@ watch(
     }
 )
 
+onBeforeMount( async ()=>{
+   let res = await net163_top_song()
+  searchAbout.searchResult = res.body.data.splice(0,20)
+})
+
 onMounted(()=>{
   ifpanel()
 })
@@ -191,7 +197,7 @@ function search() {
   net163_search({
     keywords:searchAbout.searchInput
   }).then((res)=>{
-    console.log(res);
+    // console.log(res);
     const resInfo = [];
     res.forEach(res => {
       resInfo.push({
@@ -215,23 +221,31 @@ function back() {
   router.back()
 }
 
-function toSearchList() {
-  if(playlistFlag.value !== 'SearchList'){
-    playlistFlag.value = 'SearchList';
+function toggleList(name) {
+  // console.log(name, playlistFlag.value);
+  if(playlistFlag.value !== name){
+     playlistFlag.value = name
+     console.log(playlistFlag.value);
   }
 }
 
-function toPlayList() {
-  if(playlistFlag.value !== 'PlayList'){
-    playlistFlag.value = 'PlayList';
-  }
-}
+// function toSearchList() {
+//   if(playlistFlag.value !== 'SearchList'){
+//     playlistFlag.value = 'SearchList';
+//   }
+// }
 
-function toHistoryList() {
-  if(playlistFlag.value !== 'HistoryList'){
-    playlistFlag.value = 'HistoryList';
-  }
-}
+// function toPlayList() {
+//   if(playlistFlag.value !== 'PlayList'){
+//     playlistFlag.value = 'PlayList';
+//   }
+// }
+
+// function toHistoryList() {
+//   if(playlistFlag.value !== 'HistoryList'){
+//     playlistFlag.value = 'HistoryList';
+//   }
+// }
 </script>
 
 <style lang="scss">

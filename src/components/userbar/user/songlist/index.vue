@@ -7,8 +7,11 @@
       @dblclick="getItem(song,index)"
     >
       <span class="songindex"> {{index+1}}</span>
-      <span class="songname">{{song.name}}
-        <span class="songartist">{{song.artist}}</span>
+      <span class="songname">
+        <p class="song_name">
+          {{song.name}}
+        </p>
+        <p class="songartist">{{song.artist}}</p>
       </span>
       <Icon
         :iconinfo='iconItems.more'
@@ -48,23 +51,6 @@ const songs = reactive(
     }
 )
 
-watchEffect(()=>{
-  initlist()
-})
-
-function initlist() {
-  songs.songlist = props.songlist;
-  getSongDetail(songs.songlist)
-  
-}
-
-
-onBeforeMount(()=>{
-    initlist()
-    // console.log('----------');
-    // console.log(songs.songlist);
-})
-
 const iconItems = reactive(
     {
         more:{
@@ -76,8 +62,23 @@ const iconItems = reactive(
 
 let drawer = ref(null);
 drawer = inject('drawer');
-// console.log(drawer);
 
+watchEffect(()=>{
+  initlist()
+})
+
+onBeforeMount(()=>{
+    initlist()
+    // console.log('----------');
+    // console.log(songs.songlist);
+})
+
+function initlist() {
+  songs.songlist = props.songlist;
+  getSongDetail(songs.songlist)
+  
+}
+// console.log(drawer);
 
 function toggleDrawer(data) {
     console.log(data);
@@ -146,27 +147,29 @@ async function getItem(data,index) {
 }
 
 async function getSongDetail(list){
-  try {
-    const promises = list.map(baseFetch);
-    await Promise.all(promises)
-    nextTick(()=>{
-      console.log('渲染完成');
-    })
-    // console.log(songs.songlist);
-  } catch (error) {
-    console.log(error);
-  }
+  // try {
+  //   const promises = list.map(baseFetch);
+  //   await Promise.all(promises)
+  //   nextTick(()=>{
+  //     console.log('渲染完成');
+  //   })
+  //   // console.log(songs.songlist);
+  // } catch (error) {
+  //   console.log(error);
+  // }
+  list.map(baseFetch)
 }
 
 async function baseFetch(item) {
-  let result = await net163_song_detail({id:`${item.id}`});
-  let data = result.body.songs[0];
-  item.album = data.al.name;
-  item.albumImg = data.al.picUrl;
-  item.name = data.name;
+  // let result = await net163_song_detail({id:`${item.id}`});
+  // let data = result.body.songs[0];
+  // console.log(item);
+  item.album = item.al.name;
+  item.albumImg = item.al.picUrl;
+  // item.name = item.name;
   let artist = '';
-  for(let i = 0 ; i<data?.ar.length;i++){
-      artist += `${data?.ar[i].name}/`
+  for(let i = 0 ; i<item?.ar.length;i++){
+      artist += `${item?.ar[i].name}/`
   }
   item.artist = artist;
 }
@@ -174,6 +177,7 @@ async function baseFetch(item) {
 async function getPicUrl(id) {
   try {
     let result = await net163_song_detail({id:`${id}`})
+    console.log(result);
     return result.body.songs[0].al.picUrl;
   } catch (error) {
     console.log(error);
@@ -194,9 +198,9 @@ async function getDetail(id) {
     }
     // console.log(response);
     const res =response.body;
-    // console.log(res);
-    let url = res.data[0].url;
-    return url
+    console.log(res);
+    return res.data[0].url;
+    
   } catch (error) {
     console.log(error);
   }
@@ -226,37 +230,40 @@ async function getLyric(id) {
 }
 
 function lyricHandler(lyric) {
-  // console.log(lyric);
+  console.log(lyric);
   const reg = /\n/;
   // const regTime = /\[\d{2}:\d{2}.\d{2,3}\]/;
   const lineArr = {};
   const lyricsObj = {};
   // console.log(lyric);
   for(let key in lyric) {
-    lineArr[key]=lyric[key].lyric.split(reg);
-    lyricsObj[key] = [];
-    lineArr[key].forEach(ele => {
-      // console.log(ele);
-      if (ele === '') return
-      const [time,lyric] = ele.split(']');
-      // console.log(time,lyric);
-      if(time){
-        // console.log(time[0]);
-        let lyricTime = formatLyricTime(time);
-        // console.log(lyric,lyricTime);
-        if(lyricTime >= 0){
-          lyricsObj[key].push(
-            {
-              time:lyricTime,
-              lyric
-            }
-          )
-          // lyricsObj[key][lyricTime]=lyric;
-          // console.log(lyricTime,lyricsObj[key][lyricTime]);
-          // console.log('----------');
+    console.log(key);
+    if(lyric[key]?.lyric){
+      lineArr[key]=lyric[key].lyric.split(reg);
+      lyricsObj[key] = [];
+      lineArr[key].forEach(ele => {
+        // console.log(ele);
+        if (ele === '') return
+        const [time,lyric] = ele.split(']');
+        // console.log(time,lyric);
+        if(time){
+          // console.log(time[0]);
+          let lyricTime = formatLyricTime(time);
+          // console.log(lyric,lyricTime);
+          if(lyricTime >= 0){
+            lyricsObj[key].push(
+              {
+                time:lyricTime,
+                lyric
+              }
+            )
+            // lyricsObj[key][lyricTime]=lyric;
+            // console.log(lyricTime,lyricsObj[key][lyricTime]);
+            // console.log('----------');
+          }
         }
-      }
-     });
+      });
+    }
   }
   // console.log(lyricsObj);
   return lyricsObj;

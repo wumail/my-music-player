@@ -23,6 +23,15 @@
 .global-theme {
   /* color: aliceblue !important; */
   /* background: #2c3e50; */
+  .album,.infoblock{
+    filter: invert(100%);
+  }
+  .list_item{
+    img{
+      filter: invert(100%);
+      
+    }
+  }
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -31,6 +40,7 @@
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+  
 }
 
 </style>

@@ -1,7 +1,7 @@
 import { playMode } from './config';
 import {
     getMode, getUserName, getNet163Uid, getNet163Cookie, getNet163Userinfo, getQQCookie, getVolume,
-    setMode, setUserName, setNet163Uid, setNet163Cookie, setNet163Userinfo, setVolume,
+    setMode, setUserName, setNet163Uid, setNet163Cookie, setNet163Userinfo, setQQCookie, setVolume,
     getHistoryList, setHistoryList, removeHistoryList, clearHistoryList
 } from '@/utils/storage'
 import * as types from './mutations';
@@ -13,7 +13,7 @@ const state = {
     //播放列表
     play_list: [],
     //音量
-    volume: getVolume() || 0.1,
+    volume: getVolume() || 0.4,
     currentIndex: 0,
     historyList: getHistoryList() || [],
     username: getUserName() || null,
@@ -103,6 +103,7 @@ const actions = {
     },
     // 设置播放历史
     setHistory({ commit }, music) {
+        // console.log(music);
         commit(types.SET_HISTORYLIST, setHistoryList(music))
     },
     // 删除播放历史

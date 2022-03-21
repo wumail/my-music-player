@@ -7,8 +7,11 @@
       @dblclick="getItem(song,index)"
     >
       <span class="songindex"> {{index+1}}</span>
-      <span class="songname">{{song.name}}
-        <span class="songartist">{{song.artist}}</span>
+      <span class="songname">
+        <p class="song_name">
+          {{song.name}}
+        </p>
+        <p class="songartist">{{song.artist}}</p>
       </span>
       <Icon
         :iconinfo='iconItems.more'
@@ -100,9 +103,10 @@ async function getItem(data,index) {
         }
   }
   // console.log(newSong);
+  // console.log(newSong);
   store.dispatch('playerNsong/selectAddPlay', newSong)
   // console.log(store.getters['playerNsong/playlist']);
-  store.dispatch('playerNsong/setHistory',newSong);
+  store.dispatch('playerNsong/setHistory', newSong);
   // console.log(store.getters['playerNsong/historyList']);
   // console.log('---------');
   // net163_song_detail({
@@ -165,9 +169,7 @@ async function getDetail(id) {
     }
     // console.log(response);
     const res =response.body;
-    // console.log(res);
-    let url = res.data[0].url;
-    return url
+    return res.data[0].url;
   } catch (error) {
     console.log(error);
   }

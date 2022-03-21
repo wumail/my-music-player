@@ -7,10 +7,10 @@
 <script setup>
 import List from "./index.vue";
 import { ref,reactive } from "vue";
-import { onMounted, watchEffect } from "@vue/runtime-core";
+import { onBeforeMount, onMounted, watchEffect } from "@vue/runtime-core";
 import { useRoute, useRouter } from "vue-router";
 
-import { net163_playlist_detail } from '@/api/netease.js';
+import { net163_playlist_detail, net163_playlist_all } from '@/api/netease.js';
 
 const router = useRouter();
 const route = useRoute();
@@ -24,21 +24,36 @@ const songs = reactive(
     }
 )
 
+onBeforeMount(()=>{
+  getListDetail(route.params.id)
+})
+
 watchEffect(()=>{
   id.value = route.params.id;
   getListDetail(id.value)
 })
 
 
-function getListDetail(id) {
-    net163_playlist_detail({
-        id
+async function getListDetail(id) {
+  if(id){
+    await net163_playlist_all({
+      id
     }).then((response) => {
         // console.log(response);
-        songs.songlist = response.playlist.trackIds.splice(0,20);
+        songs.songlist = response.songs;
     }).catch((err) => {
-        
+        console.log(err);
     });
+  }
+
+    // net163_playlist_detail({
+    //     id
+    // }).then((response) => {
+    //     // console.log(response);
+    //     songs.songlist = response.playlist.trackIds.splice(0,50);
+    // }).catch((err) => {
+        
+    // });
 }
 
 </script>

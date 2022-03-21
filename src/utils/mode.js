@@ -16,12 +16,12 @@ export function changeMode1(n) {
 export function changeMode(n) {
     switch (n) {
         case 0:
-            return { icon: 'loop', title: '列表循环' }
+            return { icon: 'single', title: '列表循环' }
         case 1:
-            return { icon: 'single', title: '单曲循环' }
+            return { icon: 'loop', title: '单曲循环' }
         case 2:
             return { icon: 'random', title: '随机播放' }
         default:
-            return { icon: 'loop', title: '列表循环' }
+            return { icon: 'single', title: '列表循环' }
     }
 }

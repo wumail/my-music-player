@@ -1,12 +1,14 @@
 @import './global.scss';
 @import './normalize.scss';
-
-
-
-body{
+html{
     background-color: #ece4e4;
     overflow-x: hidden;
+    filter: invert(100%);
 }
+
+// body{
+    
+// }
 
 
 .normalbar{
@@ -142,6 +144,7 @@ body{
       height: 50px;
       border-radius: 3px;
       line-height: 50px;
+      border-bottom: 1px solid #cccccc8c;
       .iconfont {
         margin-left: 10px;
       }
@@ -153,18 +156,48 @@ body{
       }
       .songname {
         line-height: 15px;
-        height: 30px;
+        height: 31px;
         display: flex;
+        justify-content: center;
         align-items: flex-start;
         flex-direction: column;
         flex: 1;
-        overflow-y: scroll;
+        // overflow-y: scroll;
         &::-webkit-scrollbar {
           width: 0px;
         }
+        span,p{
+            width: 100%;
+            text-align: start;
+            overflow-y: hidden;
+            white-space: nowrap;
+            scrollbar-width:none;
+            &::-webkit-scrollbar {
+                display: none; /* Chrome Safari */
+            }
+        }
+        .song_name{
+            width: 226px;
+            height: 16px;
+            line-height: 16px;
+            overflow-y: hidden;
+            white-space: nowrap;
+            scrollbar-width:none;
+            &::-webkit-scrollbar {
+                display: none; /* Chrome Safari */
+            }
+        }
         .songartist {
-          display: block;
-          font-size: 10px;
+        //   display: block;
+            // height: 13px;
+            width: 226px;
+            overflow-y: hidden;
+            white-space: nowrap;
+            scrollbar-width:none;
+            &::-webkit-scrollbar {
+                display: none; /* Chrome Safari */
+            }
+            font-size: 10px;
         }
       }
     }

@@ -118,7 +118,7 @@
         </el-form>
       </div>
       <div v-show="!spanner.qq">
-        {{qqmusicCookie?qqmusicCookie:'暂无QQ音乐COOKIE'}}
+        {{qqmusicCookie? 'COOKIE已保存' :'暂无QQ音乐COOKIE'}}
       </div>
     </div>
   </div>
@@ -131,6 +131,7 @@ import { useStore } from "vuex";
 import Icon from '@/components/base/icon/index.vue';
 import {  useRouter } from "vue-router";
 import { net163_login } from "@/api/login.js";
+import { qqmusic_setCookie } from '@/api/qqmusic.js'
 import { ElMessage } from "element-plus";
 
 const store = useStore();
@@ -138,10 +139,8 @@ const router = useRouter();
 // console.log('refreshed');
 let username = inject('username');
 let qqmusicCookie = ref('');
-
-let net163Ref = ref('');
 let qqRef = ref('');
-
+let net163Ref = ref('');
 let net163 = reactive(
   {
     uid:'',
@@ -149,12 +148,30 @@ let net163 = reactive(
     info:{}
   }
 )
+let userinfo = reactive(
+  {
+    username: "未登录",
+    net163_nickname: "未登录",
+    net163_usercookie: "",
+    net163_userid: "未登录",
+    net163_username: "未登录"
+  }
+)
+
+let loading = ref(false);
 
 watchEffect(()=>{
   qqmusicCookie = store.getters['playerNsong/qqmusicCookie'];
   // net163.uid = store.getters['playerNsong/net163UID'];
   // net163.cookie = store.getters['playerNsong/net163Cookie'];
-  net163.info = JSON.parse(store.getters['playerNsong/net163Userinfo']);
+  try {
+    net163.info = JSON.parse(store.getters['playerNsong/net163Userinfo']);
+  } catch (error) {
+    net163.info = userinfo
+    router.push({
+      name: 'Login'
+    })
+  }
   // console.log(net163.info);
 })
 
@@ -176,8 +193,6 @@ const iconItems = reactive({
   }
 })
 
-let loading = ref(false);
-
 const net163Model = reactive(
     {
         phone:'',
@@ -192,6 +207,34 @@ const net163Rules = {
     password: [
         { validator: validatePassword, trigger: 'blur' }
     ],
+}
+
+const qqModel = reactive(
+    {
+        cookie:'',
+    }
+)
+
+const qqRules = {
+    cookie: [
+        { validator: validateCookie, trigger: 'blur' }
+    ],
+}
+
+const spanner = reactive(
+  {
+    netease:false,
+    qq:false,
+  }
+)
+
+
+function validateCookie (rule, value, callback) {
+    if (value === '') {
+        callback(new Error('请输入cookie'));
+    } else {
+        callback();
+    }
 }
 
 function validateEmail(rule, value, callback) {
@@ -210,42 +253,14 @@ function validatePassword (rule, value, callback) {
     }
 }
 
-const qqModel = reactive(
-    {
-        cookie:'',
-    }
-)
-
-const qqRules = {
-    cookie: [
-        { validator: validatePassword, trigger: 'blur' }
-    ],
-}
-
-function validateCookie (rule, value, callback) {
-    if (value === '') {
-        callback(new Error('请输入密码'));
-    } else {
-        callback();
-    }
-}
-
-const spanner = reactive(
-  {
-    netease:false,
-    qq:false,
-  }
-)
-
 function logout(){
   store.dispatch('playerNsong/setUserName','');
   store.dispatch('playerNsong/setNet163Userinfo',{});
   router.replace({
     name:'Login'
   })
-  // location.reload()
+  location.reload()
 }
-
 
 function submitNet163() {
   net163Ref.value.validate((valid) => {
@@ -297,7 +312,42 @@ function submitNet163() {
 }
 
 function submitQQ() {
-  
+  console.log(11);
+  qqRef.value.validate((valid) => {
+    loading.value = true
+    let net163_username = store.getters['playerNsong/username'];
+    if (valid) {
+      qqmusic_setCookie({
+        cookie: qqModel.cookie,
+        username: net163_username
+      }).then((result) => {
+        let data = result.body;
+        if(!data.flag){
+          ElMessage.error({
+            message:data.message,
+            type:'error'
+          })
+          return false;
+        }
+        ElMessage.success({
+            message:data.message,
+            type:'success'
+        })
+        store.dispatch('playerNsong/setQQCookie',{
+          cookie: qqModel.cookie
+        })
+        qqModel.cookie = '';
+        qq_Spanner()
+      }).catch((err) => {
+        console.log(err);
+      }).finally(()=>{
+        loading.value = false;
+      });
+    } else {
+        console.log('error submit!!');
+        return false;
+    }
+  })
 }
 
 function netease_Spanner() {

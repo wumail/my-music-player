@@ -17,7 +17,7 @@
             <i class="iconfont icon-album"></i>
             {{current.song.album?current.song.album:'暂无专辑信息'}}</span>
           <div class="source-from">
-            from<span>网易云音乐</span> <div class="music-icon netease"></div>
+            from<span>网易云音乐</span> <i class="music-icon netease"></i>
             <!-- <i class="music-icon netease"></i> -->
           </div>
         </div>
@@ -50,50 +50,50 @@
           <Icon
             class="bg pause clbtn"
             :iconinfo='iconItems.pause'
-            @click="PLAYER.togglePause"
+            @click="_player.togglePause"
           />
         </div>
         <div class="button-group2">
           <Icon
             class="sm mode clbtn"
             :iconinfo='iconItems.mode'
-            @click="PLAYER.Mode"
+            @click="_player.Mode"
           />
           <Icon
             class="md prev clbtn"
             :iconinfo='iconItems.prev'
-            @click="PLAYER.prev"
+            @click="_player.prev"
           />
           <Icon
             class="md next clbtn"
             :iconinfo='iconItems.next'
-            @click="PLAYER.next"
+            @click="_player.next"
           />
           <Icon
             class="md list clbtn"
             :iconinfo='iconItems.list'
-            @click="PLAYER.togglePlayList"
+            @click="_player.togglePlayList"
           />
           <div class="volume">
             <Icon
               class="sm voice clbtn"
               :iconinfo='iconItems.voice'
-              @click="VOLUME.toggleVolume"
+              @click="_volume.toggleVolume"
             />
             <div
               id="volume_outer"
-              :class="{hidden:volumeHidden}"
-              @mousemove="VOLUME.volume_throttleStart"
-              @mouseup="VOLUME.volume_moveout"
+              :class="{hidden:_volume.volumeHidden}"
+              @mousemove="_volume.volume_throttleStart"
+              @mouseup="_volume.volume_moveout"
             >
               <div
                 id="volume_inner"
-                @mousedown="VOLUME.volume_mousedown"
+                @mousedown="_volume.volume_mousedown"
               >
                 <div
                   id="volume_bar"
-                  @mousemove="VOLUME.volume_throttleStart"
-                  @mousedown="VOLUME.volume_movebegin"
+                  @mousemove="_volume.volume_throttleStart"
+                  @mousedown="_volume.volume_movebegin"
                   draggable="true"
                 ></div>
                 <div id="volume_progress"></div>
@@ -103,8 +103,8 @@
         </div>
       </div>
       <audio
-        @canplay='PROGRESS.getDuration'
-        @timeupdate="LYRIC.updateTime"
+        @canplay='_progress.getDuration'
+        @timeupdate="_lyric.updateTime"
         id="music"
         src=""
       ></audio>
@@ -112,8 +112,8 @@
       <!-- https://music.163.com/song/media/outer/url?id=28238311.mp3 -->
       <div
         id="progress_outer"
-        @mousemove="PROGRESS.progress_throttleStart"
-        @mouseup="PROGRESS.progress_moveout"
+        @mousemove="_progress.progress_throttleStart"
+        @mouseup="_progress.progress_moveout"
       >
         <span>
           <span class="time-played">{{audioInfo.current}}</span> /
@@ -121,13 +121,13 @@
         </span>
         <div
           id="progress_inner"
-          @mousedown="PROGRESS.progress_mousedown"
+          @mousedown="_progress.progress_mousedown"
         >
           <div id="progress_buffered">
             <div
               id="progress_bar"
-              @mousemove="PROGRESS.progress_throttleStart"
-              @mousedown="PROGRESS.progress_movebegin"
+              @mousemove="_progress.progress_throttleStart"
+              @mousedown="_progress.progress_movebegin"
               draggable="true"
             ></div>
             <div id="progress_played"></div>
@@ -139,7 +139,7 @@
 </template>
 
 <script setup>
-import { computed, defineEmit, defineProps, nextTick, onMounted, onBeforeUnmount, reactive, ref, toRefs, watch, watchEffect } from "vue";
+import { computed, defineEmit, defineProps, nextTick, onMounted, reactive, ref, toRefs, watch, watchEffect } from "vue";
 import { mapGetters, mapMutations, mapActions, useStore } from 'vuex'
 import { useRouter } from "vue-router";
 import { ElMessage } from 'element-plus'
@@ -159,15 +159,11 @@ const emit = defineEmit(['togglePlayList']);
 
 let outimg = 'https://ae01.alicdn.com/kf/HTB1G5m9qb1YBuNjSszeq6yblFXad/paper-tropical-leaves-monstera-palm-green-photo-backdrop-Vinyl-cloth-High-quality-Computer-print-wall-background.jpg';
 let audio = ref(null);
-let firstIN = true
-let volumeHidden =ref(true);
 
-let LYRIC = useLyric(),
-    PLAYER = usePlayer(),
-    VOLUME = useVolume(),
-    PROGRESS = useProgress()
-
-// console.log(PLAYER)
+let _lyric = useLyric(),
+    _player = usePlayer(),
+    _volume = useVolume(),
+    _progress = useProgress()
 
 const pauseModel =reactive({
   0:{icon:'play',title:'播放'},
@@ -184,6 +180,46 @@ const playerData =reactive(
       //   id:518649049,
       //   song_url:'https://music.163.com/song/media/outer/url?id=518649049.mp3'
       // },
+      // {
+      //   name:'2',
+      //   album:'2',
+      //   albumImg:outimg,
+      //   artist:'2',
+      //   id:28238311,
+      //   song_url:'https://music.163.com/song/media/outer/url?id=28238311.mp3'
+      // },
+      // {
+      //   name:'3',
+      //   album:'3',
+      //   albumImg:outimg,
+      //   artist:'3',
+      //   id:316088,
+      //   song_url:'https://music.163.com/song/media/outer/url?id=316088.mp3'
+      // },
+      // {
+      //   name:'4',
+      //   album:'4',
+      //   albumImg:outimg,
+      //   artist:'4',
+      //   id:316103,
+      //   song_url:'https://music.163.com/song/media/outer/url?id=316103.mp3'
+      // },
+      // {
+      //   name:'5',
+      //   album:'5',
+      //   albumImg:outimg,
+      //   artist:'5',
+      //   id:4235845,
+      //   song_url:'https://music.163.com/song/media/outer/url?id=4235845.mp3'
+      // },
+      // {
+      //   name:'6',
+      //   album:'6',
+      //   albumImg:outimg,
+      //   artist:'6',
+      //   id:316084,
+      //   song_url:'https://music.163.com/song/media/outer/url?id=316084.mp3'
+      // }
     ],
     length:0,
   }
@@ -226,7 +262,7 @@ const iconItems = reactive(
     },
     voice:{
       title:'音量',
-      type: VOLUME.volumeCompute(),
+      type: _volume.volumeCompute(),
       size:16
     },
   }
@@ -246,6 +282,22 @@ let ulRef = ref('');
 let WIDTH = 390;
 let VOLUME_HIGHT = 158;
 
+
+async function setSong(cur){
+    cur = cur ? cur : store.getters['playerNsong/currentMusic'];
+    console.log(cur);
+    // console.log(audio.src);
+    current.song = cur;
+    audio.src = cur.song_url;
+}
+
+function setNewSong(n){
+    store.commit('playerNsong/SET_CURRENTINDEX',n);
+    setSong()
+    _progress.progressReset()
+    _player.play()
+}
+
 watch(
     ()=>audio.duration,
     (now)=>{
@@ -262,13 +314,6 @@ watch(
     },
 )
 
-watch(
-  ()=>PLAYER.curMode,
-  (now)=>{
-    console.log(PLAYER.curMode);
-  }
-)
-
 const list = reactive(
   {
     data:[]
@@ -279,7 +324,7 @@ watchEffect(()=>{
     list.data = store.getters['playerNsong/currentMusic'];
     playerData.songs = store.getters['playerNsong/historyList'];
     setSong(list.data); 
-    if(!firstIN)PLAYER.play()
+    _player.play()
     // volume_bar.style.marginBottom = audioInfo.volume*VOLUME_HIGHT + 'px';
 })
 
@@ -288,35 +333,15 @@ onMounted(()=>{
     // volume_bar.style.marginBottom = audio.volume*VOLUME_HIGHT + 'px';
     // volume_progress.style.height = audioInfo.volume*VOLUME_HIGHT + 'px';
     // initUser()
-    VOLUME.volumeSet()
-    PLAYER.initMode()
-    VOLUME.ifvolume()
-    PLAYER.setPlayList()
+    _volume.volumeSet()
+    _player.initMode()
+    _volume.ifvolume()
+    _player.setPlayList()
     setSong()
 })
-
-onBeforeUnmount(()=>{
-  PLAYER.pause()
-})
-
-function setSong(cur){
-    cur = cur ? cur : store.getters['playerNsong/currentMusic'];
-    console.log(cur);
-    // console.log(audio.src);
-    current.song = cur;
-    audio.src = cur.song_url;
-}
-
-function setNewSong(n){
-    store.commit('playerNsong/SET_CURRENTINDEX',n);
-    setSong()
-    PROGRESS.progressReset()
-    PLAYER.play()
-}
 
 
 function useLyric(){
-
   function matchLyricByTime() {
     if(current.song.lyric.lrc){
       let lrc = current.song.lyric?.lrc;
@@ -332,6 +357,21 @@ function useLyric(){
   }
 
   function updateTime(){
+    // audioInfo.currentime = audio.currentTime;
+    // audioInfo.current = transTime(audio.currentTime);
+    // if(current.index.time <= audioInfo.currentime && current.song.lyric.lrc[current.index.index]){
+    //   // console.log(current.index.time,audioInfo.currentime);
+    //   current.index.index++;
+    //   current.index.time = current.song.lyric.lrc[current.index.index].time;
+    //   // console.log(ulRef);
+    //   ulRef.value.style.transform = `translateY(${-(100 * (current.index.index-1))}px)`;
+    // }
+    // // console.log(current.index);
+    // if(!ifpause.value && audioInfo.currentime >= audioInfo.duration){
+    //   let playmode = store.getters['playerNsong/mode'];
+    //   playmode === 0?loop():playmode === 1?single():random();
+    // }
+    // progressSet();
     audioInfo.currentime = audio.currentTime;
     audioInfo.current = transTime(audio.currentTime);
     // console.log(current.song.lyric);
@@ -344,13 +384,13 @@ function useLyric(){
     }
     // console.log(current.index);
     // console.log(!ifpause.value,audioInfo.currentime ,audioInfo.duration,audioInfo.currentime >= audioInfo.duration);
-    if(!PLAYER.ifpause.value && audioInfo.currentime >= audioInfo.duration){
+    if(!_player.ifpause.value && audioInfo.currentime >= audioInfo.duration){
       console.log('will change');
       let playmode = store.getters['playerNsong/mode'];
-      PLAYER[PLAYER.curMode.value]()
+      _player[_player.curMode]()
       // playmode === 0? loop() : playmode === 1 ? single() : random();
     }
-    PROGRESS.progressSet();
+    _progress.progressSet();
   }
 
   return {
@@ -363,12 +403,11 @@ function usePlayer(){
   let modecount = ref(0);
   let ifpause = ref(true);
   let pauseTarget = ref(null);
-  let curMode = ref('')
+  let curMode
 
   function play(){
-    firstIN && (firstIN = false)
     nextTick(()=>{
-      LYRIC.matchLyricByTime();
+      _lyric.matchLyricByTime();
       console.log('src:',audio.src);
       audio.play();
     }).catch(err=>{
@@ -450,7 +489,7 @@ function usePlayer(){
     const v = changeMode(modecount.value);
     iconItems.mode.title = v.title;
     iconItems.mode.type = v.icon;
-    curMode.value = v.icon
+    curMode = v.icon
   }
 
   function Mode(){
@@ -461,7 +500,7 @@ function usePlayer(){
       const v = changeMode(modecount.value);
       iconItems.mode.title = v.title;
       iconItems.mode.type = v.icon;
-      curMode.value = v.icon 
+      curMode = v.icon 
   }
 
   function togglePause(e){
@@ -494,6 +533,7 @@ function usePlayer(){
 }
 
 function useVolume(){
+  let volumeHidden =ref(true);
   let volume_move = false;
   let volume_clickmove = false;
   let volume_mouseStartY = 0;
@@ -586,6 +626,7 @@ function useVolume(){
   }
 
   return {
+    volumeHidden,
     toggleVolume,
     ifvolume,
     volumeCompute,
@@ -598,7 +639,6 @@ function useVolume(){
 }
 
 function useProgress(){
-  
   let progress_move = false;
   let progress_clickmove = false;
   let progress_mouseStartX = 0;
@@ -628,12 +668,12 @@ function useProgress(){
         audioInfo.currentime = a;
       }
       progress_clickmove = false;
-      PLAYER.play()
+      _player.play()
   }
 
   function progress_throttleStart(e) {
       if (progress_move) {
-        PLAYER.pause()
+        _player.pause()
         throttle(progress_movestart,8)(e);
       }
   }

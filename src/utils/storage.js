@@ -37,6 +37,7 @@ export function getHistoryList() {
 
 // 更新播放历史
 export function setHistoryList(music) {
+  console.log(music);
   let list = storage.get(HISTORYLIST_KEY)
   const index = list.findIndex(item => {
     return item.id === music.id

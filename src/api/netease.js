@@ -1,5 +1,10 @@
 import service from '../utils/request.js';
 
+/**
+ * 
+ * @param {*} data: require: uid, options: limit offset
+ * @returns 
+ */
 export function net163_playlist(data) {
     return service.request({
         method: "post",
@@ -8,6 +13,11 @@ export function net163_playlist(data) {
     })
 }
 
+/**
+ * 
+ * @param {*} data:uid 
+ * @returns 
+ */
 export function net163_user_detail(data) {
     return service.request({
         method: "post",
@@ -20,6 +30,19 @@ export function net163_playlist_detail(data) {
     return service.request({
         method: "post",
         url: "/net163/playlist_detail/",
+        data
+    })
+}
+
+/**
+ * 
+ * @param {*} data: require: uid, options: limit offset
+ * @returns 
+*/
+export function net163_playlist_all(data) {
+    return service.request({
+        method: 'post',
+        url: '/net163/playlist_all',
         data
     })
 }
@@ -60,6 +83,30 @@ export function net163_search(data) {
     return service.request({
         method: "post",
         url: "/net163/search/",
+        data
+    })
+}
+
+export function net163_hot(data) {
+    return service.request({
+        method: "post",
+        url: "/net163/hot/",
+        data
+    })
+}
+
+export function net163_hot_detail(data) {
+    return service.request({
+        method: "post",
+        url: "/net163/hot_detail/",
+        data
+    })
+}
+
+export function net163_top_song(data) {
+    return service.request({
+        method: "post",
+        url: "/net163/top/song/",
         data
     })
 }

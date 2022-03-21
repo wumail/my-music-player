@@ -1,5 +1,8 @@
 <template>
-  <div>
+  <div v-if="!net163UID">
+    请登录
+  </div>
+  <div v-else>
     <template
       v-for="list in resource.list"
       :key="list.id"
@@ -22,10 +25,10 @@
 </template>
 
 <script setup>
-import { defineProps, inject, onMounted, provide, ref, reactive,watchEffect } from "@vue/runtime-core";
+import { defineProps, inject, onMounted, provide, ref, reactive,watchEffect, onBeforeUnmount, computed } from "@vue/runtime-core";
 import { useStore } from 'vuex';
 import { useRouter } from "vue-router";
-import { net163_playlist,net163_playlist_detail } from '@/api/netease.js';
+import { net163_playlist } from '@/api/netease.js';
 
 
 // const props = defineProps(
@@ -41,8 +44,13 @@ import { net163_playlist,net163_playlist_detail } from '@/api/netease.js';
 const store = useStore();
 const router = useRouter();
 
-let net163UID = JSON.parse(store.getters['playerNsong/net163Userinfo']).net163_username;
-// console.log(net163UID);
+const net163UID = ref('')
+
+watchEffect(()=>{
+  net163UID.value = JSON.parse(store.getters['playerNsong/net163Userinfo']).net163_username;
+})
+
+console.log(net163UID.value);
 
 const resource = reactive(
     {
@@ -51,19 +59,25 @@ const resource = reactive(
 )
 
 onMounted(()=>{
-    getPlayList_net163(net163UID)
+    getPlayList_net163(net163UID.value)
+})
+
+onBeforeUnmount(()=>{
+  resource.list = []
 })
 
 function getPlayList_net163(net163UID) {
     net163_playlist(
-      {username:net163UID
+      {
+        username: net163UID
       }).then((response)=>{
         const playlist = response.playlist;
         let userId = playlist[0].userId;
         const userlist = playlist.filter((list)=>{
             return userId===list.userId
         });
-        resource.list = userlist;
+        // console.log(userlist.splice(1));
+        resource.list = userlist.splice(1);
     }).catch((err)=>{
         console.log(err);
     })
