@@ -20,19 +20,19 @@
 </script>
 
 <style lang="scss">
-.global-theme {
-  /* color: aliceblue !important; */
-  /* background: #2c3e50; */
-  .album,.infoblock{
-    filter: invert(100%);
-  }
-  .list_item{
-    img{
-      filter: invert(100%);
+// .global-theme {
+//   /* color: aliceblue !important; */
+//   /* background: #2c3e50; */
+//   .album,.infoblock{
+//     filter: invert(100%);
+//   }
+//   .list_item{
+//     img{
+//       filter: invert(100%);
       
-    }
-  }
-}
+//     }
+//   }
+// }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

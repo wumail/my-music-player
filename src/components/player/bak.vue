@@ -357,21 +357,6 @@ function useLyric(){
   }
 
   function updateTime(){
-    // audioInfo.currentime = audio.currentTime;
-    // audioInfo.current = transTime(audio.currentTime);
-    // if(current.index.time <= audioInfo.currentime && current.song.lyric.lrc[current.index.index]){
-    //   // console.log(current.index.time,audioInfo.currentime);
-    //   current.index.index++;
-    //   current.index.time = current.song.lyric.lrc[current.index.index].time;
-    //   // console.log(ulRef);
-    //   ulRef.value.style.transform = `translateY(${-(100 * (current.index.index-1))}px)`;
-    // }
-    // // console.log(current.index);
-    // if(!ifpause.value && audioInfo.currentime >= audioInfo.duration){
-    //   let playmode = store.getters['playerNsong/mode'];
-    //   playmode === 0?loop():playmode === 1?single():random();
-    // }
-    // progressSet();
     audioInfo.currentime = audio.currentTime;
     audioInfo.current = transTime(audio.currentTime);
     // console.log(current.song.lyric);
